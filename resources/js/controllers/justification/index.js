@@ -1,0 +1,199 @@
+import TableEngine from "../../modules/table/TableEngine";
+import { initPreviewModal, setupDeleteModal } from "../../core/modal";
+
+export default function () {
+    const table = document.getElementById("recordContainer");
+    const tableBody = document.getElementById("tableBody");
+
+    if (!table || !tableBody) return;
+
+    const TIPO_LABEL = {
+        JT: {
+            label: "Temporal",
+            bg: "rgba(0,176,202,0.1)",
+            color: "rgb(0,130,150)",
+        },
+        JI: {
+            label: "Indefinida",
+            bg: "rgba(139,92,246,0.1)",
+            color: "rgb(109,40,217)",
+        },
+    };
+
+    function tipoBadge(type) {
+        const t = TIPO_LABEL[type] ?? {
+            label: type ?? "-",
+            bg: "rgba(100,116,139,0.1)",
+            color: "rgb(71,85,105)",
+        };
+        return `<span class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full"
+                    style="background:${t.bg}; color:${t.color};">
+                    ${t.label}
+                </span>`;
+    }
+
+    function nombreEstudiante(record) {
+        const p = record.enrollment?.student?.person;
+        if (!p) return "-";
+        return [p.firstname, p.lastname_father, p.lastname_mom]
+            .filter(Boolean)
+            .join(" ");
+    }
+
+    function sesionLabel(record) {
+        const s = record.assistance_session;
+        if (!s) return '<span class="text-slate-300">Sin sesión</span>';
+        return `${s.date ?? ""}${s.schedule?.turn ? " (" + s.schedule.turn + ")" : ""}`;
+    }
+
+    const tableEngine = new TableEngine({
+        baseUrl: "/justification",
+        search: true,
+        pagination: true,
+        loading: true,
+
+        config: {
+            recordsPerPage: 10,
+        },
+
+        actions: {
+            delete: {
+                url: "/destroy",
+                method: "DELETE",
+                modal: "delete",
+            },
+            edit: {
+                url: "/form",
+                redirect: true,
+            },
+        },
+
+        /* =========================
+           TABLA DESKTOP
+        ========================= */
+        createRow(record) {
+            return `
+                <tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.1s;"
+                    onmouseover="this.style.background='#f8fafc'"
+                    onmouseout="this.style.background=''">
+
+                    <!-- Estudiante -->
+                    <td class="px-5 py-3 text-xs text-slate-700">
+                        <span class="font-medium">${nombreEstudiante(record)}</span>
+                    </td>
+
+                    <!-- Tipo -->
+                    <td class="px-5 py-3 text-xs">
+                        ${tipoBadge(record.type)}
+                    </td>
+
+                    <!-- Sesión -->
+                    <td class="px-5 py-3 text-xs text-slate-500">
+                        ${sesionLabel(record)}
+                    </td>
+
+                    <!-- Razón -->
+                    <td class="px-5 py-3 text-xs text-slate-600 max-w-xs">
+                        <span title="${record.reason ?? ""}"
+                            class="block truncate max-w-[220px]">
+                            ${record.reason ?? "-"}
+                        </span>
+                    </td>
+
+                    <!-- Acciones -->
+                    <td class="px-5 py-3">
+                        <div class="flex justify-center gap-1.5">
+
+                             <button class="btn-edit w-7 h-7 flex items-center justify-center rounded transition-all"
+                            style="color: #64748b;"
+                            onmouseover="this.style.background='rgba(0,176,202,0.08)'; this.style.color='rgb(0,140,165)';"
+                            onmouseout="this.style.background=''; this.style.color='#64748b';"
+                                data-id="${record.codjustification}" 
+                                title="Editar">
+                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                </svg>
+                            </button>
+                            <button class="btn-delete w-7 h-7 flex items-center justify-center rounded transition-all"
+                                style="color: #94a3b8;"
+                                onmouseover="this.style.background='rgba(239,68,68,0.08)'; this.style.color='rgb(220,50,50)';"
+                                onmouseout="this.style.background=''; this.style.color='#94a3b8';" 
+                                data-id="${record.codjustification}" 
+                                title="Eliminar">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                </svg>
+                            </button>
+
+                        </div>
+                    </td>
+                </tr>
+            `;
+        },
+
+        /* =========================
+           CARDS MOBILE
+        ========================= */
+        createCard(record) {
+            return `
+                <div class="relative overflow-hidden rounded-xl mb-3 bg-white"
+                    style="border: 1px solid #e8edf2; box-shadow: 0 1px 4px rgba(0,0,0,0.04);"
+                    data-id="${record.codjustification}">
+
+                    <div class="p-4 space-y-2">
+
+                        <!-- Cabecera: nombre + tipo -->
+                        <div class="flex items-start justify-between gap-2">
+                            <p class="text-sm font-semibold text-slate-800 leading-tight">
+                                ${nombreEstudiante(record)}
+                            </p>
+                            ${tipoBadge(record.type)}
+                        </div>
+
+                        <!-- Sesión -->
+                        <p class="text-xs text-slate-400">
+                            <span class="material-symbols-outlined text-[12px] align-middle">calendar_today</span>
+                            ${sesionLabel(record)}
+                        </p>
+
+                        <!-- Razón -->
+                        <p class="text-xs text-slate-600 line-clamp-2">
+                            ${record.reason ?? "-"}
+                        </p>
+
+                        <!-- Acciones -->
+                        <div class="flex gap-2 pt-1">
+
+                            <button class="btn-edit flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg text-xs font-semibold transition-all"
+                                style="background: rgba(99,102,241,0.10); color: rgb(79,70,229);"
+                                ontouchstart="this.style.background='rgba(99,102,241,0.20)'"
+                                ontouchend="this.style.background='rgba(99,102,241,0.10)'"
+                                data-id="${record.codjustification}">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                </svg>
+                                Editar
+                            </button>
+
+                            <button class="btn-delete flex items-center justify-center py-2 px-3 rounded-lg transition-all"
+                                style="background: rgba(239,68,68,0.08); color: rgb(220,50,50);"
+                                ontouchstart="this.style.background='rgba(239,68,68,0.18)'"
+                                ontouchend="this.style.background='rgba(239,68,68,0.08)'"
+                                data-id="${record.codjustification}">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+            `;
+        },
+    });
+
+    setupDeleteModal();
+    initPreviewModal();
+}

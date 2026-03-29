@@ -1,0 +1,7 @@
+@import "./default.css";
+@import "./icons.css";
+@import "./tom-select.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

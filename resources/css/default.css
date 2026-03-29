@@ -1,0 +1,19 @@
+body {
+    -webkit-font-smoothing: antialiased;
+    font-family: "Mona Sans", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+    line-height: 1.25 !important;
+    background-color: #f5f7fb !important;
+    /* background-color: #ffffff !important; */
+}
+
+.table-loading {
+    min-height: 220px;
+}
+
+.swipe-card {
+    touch-action: pan-y;
+}
+
+.card-content {
+    will-change: transform;
+}
