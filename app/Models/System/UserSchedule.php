@@ -2,23 +2,22 @@
 
 namespace App\Models\System;
 
-use App\Models\Security\User;
+use App\Models\Grade;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Person;
+use App\Models\Security\User;
 
-class AssistanceSession extends Model
+class UserSchedule extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'system.assistance_session';
-    protected $primaryKey = 'codassistance_session';
+    protected $table      = 'system.user_schedule';
+    protected $primaryKey = 'coduser_schedule';
 
     protected $fillable = [
         'codschedule',
         'coduser',
-        'date',
-        'time_opening',
-        'time_ending',
     ];
 
     public function schedule()

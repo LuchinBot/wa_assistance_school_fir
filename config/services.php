@@ -30,10 +30,17 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
-    
+
     'reniec' => [
         'api_key' => env('RENIEC_API_KEY'),
         'url' => env('RENIEC_API_URL', 'http://reniec.devsysve.com/api'),
+    ],
+    
+    'twilio' => [
+        'sid' => env('TWILIO_SID'),
+        'token' => env('TWILIO_TOKEN'),
+        'from' => env('TWILIO_WHATSAPP_FROM'),
+        'content_sid' => env('TWILIO_CONTENT_SID'),
     ],
 
 ];

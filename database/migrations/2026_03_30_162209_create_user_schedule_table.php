@@ -4,26 +4,24 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAssistanceSessionTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('system.assistance_session', function (Blueprint $table) {
-            $table->bigIncrements('codassistance_session');
+        Schema::create('system.user_schedule', function (Blueprint $table) {
+            $table->bigIncrements('coduser_schedule');
+
+            // Relaciones
             $table->unsignedBigInteger('codschedule');
             $table->unsignedBigInteger('coduser');
-            $table->date('date');
-            $table->timestamp('time_opening');
-            $table->timestamp('time_ending')->nullable();
             $table->timestamps();
             $table->softDeletes();
 
-            // Foreign Keys
+            // 🔑 FOREIGN KEYS
+
             $table->foreign('codschedule')
                 ->references('codschedule')
                 ->on('system.schedules')
@@ -40,11 +38,9 @@ class CreateAssistanceSessionTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
-        Schema::dropIfExists('system.assistance_session');
+        Schema::dropIfExists('system.user_schedule');
     }
-}
+};

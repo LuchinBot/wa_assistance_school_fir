@@ -3,13 +3,14 @@
 namespace App\Models\Security;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Database\Eloquent\Relations\{HasManyThrough, BelongsTo};
+use Illuminate\Database\Eloquent\Relations\{HasManyThrough, BelongsTo, BelongsToMany};
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Hash;
 
 use App\Models\Security\{ProfilePermission, Permission, Profile};
 use App\Models\Person;
+use App\Models\System\Schedules;
 
 class User extends Authenticatable
 {
@@ -96,6 +97,18 @@ class User extends Authenticatable
             'codpermission',
             'codprofile',
             'codpermission'
+        );
+    }
+
+    public function schedules(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Schedules::class,
+            'user_schedule',
+            'coduser',
+            'codschedule',
+            'coduser',
+            'codschedule'
         );
     }
 }

@@ -22,6 +22,9 @@ use App\Exports\AssistanceExport;
 use App\Models\System\Justification;
 use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Jobs\SendWhatsAppJob;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class AssistanceController extends Controller
 {
@@ -59,11 +62,18 @@ class AssistanceController extends Controller
             ->limit($this->perPage)
             ->get();
 
-        $schedules = Schedules::get();
-        $opening   = AssistanceSession::whereNull('time_ending')->first();
+        $schedules = Auth::user()->schedules;
+        $scheduleIds = Auth::user()->schedules->pluck('codschedule');
+
+        $opening = AssistanceSession::whereIn('codschedule', $scheduleIds)
+            ->whereNull('time_ending')
+            ->with('schedule')
+            ->first();
+
         $periods = Period::get();
 
-        $sessions = AssistanceSession::with('schedule')
+        $sessions = AssistanceSession::whereIn('codschedule', $scheduleIds)
+            ->with('schedule')
             ->orderBy('date', 'DESC')
             ->orderBy('codassistance_session', 'DESC')
             ->get();
@@ -100,40 +110,50 @@ class AssistanceController extends Controller
         $gradeId         = request()->query('grade');
         $gradeScheduleId = request()->query('grade_schedule');
 
+        $userSchedules = auth()->user()->schedules->pluck('codschedule');
+
         $query = Assistance::with(
             'enrollment.student.person',
             'enrollment.grade_schedule.grade',
             'enrollment.grade_schedule.schedule',
             'enrollment.period',
             'assistance_session.schedule'
-        )->orderBy('codassistance', 'DESC');
+        )
+            ->whereHas('assistance_session', function ($q) use ($userSchedules) {
+                $q->whereIn('codschedule', $userSchedules);
+            })
+            ->orderBy('codassistance', 'DESC');
 
-        // Filtro sesión
+        // Filtro sesión (SEGURIDAD)
         if (!empty($sessionId) && $sessionId !== 'null') {
-            $query->where('codassistance_session', $sessionId);
+            $query->whereHas('assistance_session', function ($q) use ($sessionId, $userSchedules) {
+                $q->where('codassistance_session', $sessionId)
+                    ->whereIn('codschedule', $userSchedules);
+            });
         }
 
         // Filtro grado/sección
         if (!empty($gradeScheduleId) && $gradeScheduleId !== 'null') {
             $query->whereHas(
                 'enrollment',
-                fn($q) => $q->where('codgrade_schedule', $gradeScheduleId)
+                fn($q) =>
+                $q->where('codgrade_schedule', $gradeScheduleId)
             );
         } elseif (!empty($gradeId) && $gradeId !== 'null') {
             $query->whereHas(
                 'enrollment.grade_schedule',
-                fn($q) => $q->where('codgrade', $gradeId)
+                fn($q) =>
+                $q->where('codgrade', $gradeId)
             );
         }
 
         // Búsqueda
         if (!empty($keyword) && $keyword !== 'null') {
-            $query->whereHas(
-                'enrollment.student.person',
-                fn($p) => $p->where('firstname', 'ILIKE', "%{$keyword}%")
+            $query->whereHas('enrollment.student.person', function ($p) use ($keyword) {
+                $p->where('firstname', 'ILIKE', "%{$keyword}%")
                     ->orWhere('lastname_father', 'ILIKE', "%{$keyword}%")
-                    ->orWhere('identify_number', 'ILIKE', "%{$keyword}%")
-            );
+                    ->orWhere('identify_number', 'ILIKE', "%{$keyword}%");
+            });
         }
 
         $total = (clone $query)->count();
@@ -211,25 +231,60 @@ class AssistanceController extends Controller
     {
         $request->validate(['codschedule' => 'required']);
 
-        $sessionOpen = AssistanceSession::whereNull('time_ending')->exists();
+        $alreadyOpen = AssistanceSession::where('codschedule', $request->codschedule)
+            ->whereDate('date', Carbon::today())
+            ->whereNull('time_ending')
+            ->first();
+
+        if ($alreadyOpen) {
+            return response()->json([
+                'success' => true,
+                'message' => 'La sesión ya fue aperturada por otro usuario.',
+                'session' => $alreadyOpen
+            ]);
+        }
+
+        // 1. Validar si el usuario ya tiene sesión abierta
+        $sessionOpen = AssistanceSession::where('coduser', Auth::user()->coduser)
+            ->whereNull('time_ending')
+            ->exists();
+
         if ($sessionOpen) {
             return response()->json([
                 'success' => false,
-                'message' => 'Ya existe una sesión abierta. Ciérrala antes de aperturar una nueva.'
+                'message' => 'Ya tienes una sesión abierta.'
             ], 422);
         }
 
+        // 2. Validar si ya existe sesión abierta para ese horario (GLOBAL)
+        $existingSession = AssistanceSession::where('codschedule', $request->codschedule)
+            ->whereNull('time_ending')
+            ->first();
+
+        if ($existingSession) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Ya existe una sesión activa para este horario.',
+                'session' => $existingSession
+            ]);
+        }
+
+        // 3. Crear sesión
         $session = AssistanceSession::create([
+            'coduser'      => Auth::user()->coduser,
             'codschedule'  => $request->codschedule,
             'date'         => Carbon::today(),
             'time_opening' => Carbon::now(),
             'time_ending'  => null,
         ]);
 
-        // 🔥 PRECARGAR JUSTIFICADOS
         $this->loadJustifiedStudents($session);
 
-        return response()->json(['success' => true, 'message' => 'Sesión aperturada']);
+        return response()->json([
+            'success' => true,
+            'message' => 'Sesión aperturada',
+            'session' => $session
+        ]);
     }
 
     private function loadJustifiedStudents($session)
@@ -272,16 +327,115 @@ class AssistanceController extends Controller
 
     public function closing()
     {
-        $session = AssistanceSession::whereNull('time_ending')->first();
+        $scheduleIds = Auth::user()->schedules->pluck('codschedule');
+
+        $session = AssistanceSession::whereIn('codschedule', $scheduleIds)
+            ->whereNull('time_ending')
+            ->first();
+
         if (!$session) {
             return response()->json([
                 'success' => false,
-                'message' => 'No hay ninguna sesión abierta.'
+                'message' => 'No hay ninguna sesión abierta en tus horarios.'
             ], 422);
         }
 
-        $session->update(['time_ending' => Carbon::now()]);
-        return response()->json(['success' => true, 'message' => 'Sesión cerrada correctamente']);
+        $session->update([
+            'time_ending' => Carbon::now()
+        ]);
+
+        // Contar presentes y ausentes
+        $totalPresent = Assistance::where('codassistance_session', $session->codassistance_session)
+            ->count();
+
+        $totalAbsent = Enrollment::whereHas('period', fn($q) => $q->where('is_active', 'Y'))
+            ->whereHas('grade_schedule', fn($q) => $q->where('codschedule', $session->codschedule))
+            ->whereNotExists(function ($q) use ($session) {
+                $q->select(DB::raw(1))
+                    ->from('system.assistance')
+                    ->whereColumn('assistance.codenrollment', 'system.enrollment.codenrollment')
+                    ->where('assistance.codassistance_session', $session->codassistance_session)
+                    ->whereNull('assistance.deleted_at');
+            })
+            ->count();
+
+        // Notificar ausentes y directivos
+        $this->notifyAbsents($session);
+        $this->notifyDirectivos($session, $totalPresent, $totalAbsent);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Sesión cerrada correctamente'
+        ]);
+    }
+
+    private function notifyAbsents($session)
+    {
+        $absentEnrollments = Enrollment::with('student.person')
+            ->whereHas('period', fn($q) => $q->where('is_active', 'Y'))
+            ->whereHas('grade_schedule', fn($q) => $q->where('codschedule', $session->codschedule))
+            ->whereNotExists(function ($q) use ($session) {
+                $q->select(DB::raw(1))
+                    ->from('system.assistance')
+                    ->whereColumn('assistance.codenrollment', 'system.enrollment.codenrollment')
+                    ->where('assistance.codassistance_session', $session->codassistance_session)
+                    ->whereNull('assistance.deleted_at');
+            })
+            ->get();
+
+        $messages = [];
+        $institution = env('IE');
+        $date = Carbon::parse($session->date)->format('d/m/Y');
+
+        foreach ($absentEnrollments as $enrollment) {
+            $phone = $enrollment->student->person->phone ?? null;
+            if (!$phone) continue;
+
+            $phone = preg_replace('/\D/', '', $phone);
+            $phone = preg_replace('/^(51|0051|\+51)/', '', $phone);
+
+            $studentName = $enrollment->student->person->firstname . ' ' .
+                $enrollment->student->person->lastname_father;
+
+            $messages[] = [
+                'phone'   => $phone,
+                'message' => "⚠️ *Notificación de Inasistencia*\n\n" .
+                    "Su menor de nombre *{$studentName}* no asistió a clases el *{$date}*.\n\n" .
+                    "Si tiene alguna consulta o justificación, comuníquese con nosotros al *930 227 604*.\n\n" .
+                    "_Atentamente_, \n *{$institution}*"
+            ];
+        }
+
+        if (empty($messages)) return;
+
+        // Enviar todos de un golpe al VPS, Node se encarga del delay
+        Http::post(env('WHATSAPP_API_URL') . '/queue', [
+            'messages' => $messages
+        ]);
+    }
+
+    private function notifyDirectivos($session, $totalPresent, $totalAbsent)
+    {
+        $phones = config('whatsapp.directivos');
+
+        if (empty($phones)) return;
+
+        $institution = env('IE');
+        $date        = Carbon::parse($session->date)->format('d/m/Y');
+        $schedule    = $session->schedule->turn ?? 'N/A';
+
+        $message = "📊 *Resumen de Asistencia*\n\n" .
+            "📅 Fecha: *{$date}*\n" .
+            "🕐 Horario: *{$schedule}*\n\n" .
+            "✅ Presentes: *{$totalPresent}*\n" .
+            "❌ Ausentes: *{$totalAbsent}*\n\n" .
+            "_Reporte generado al automáticamente._\n" .
+            "_*{$institution}*_";
+
+        Http::post(config('whatsapp.api_url') . '/broadcast', [
+            'phones'  => $phones,
+            'message' => $message
+        ]);
     }
 
     /* =============================================
@@ -325,7 +479,10 @@ class AssistanceController extends Controller
         }
 
         // Sesión activa
+        $scheduleIds = Auth::user()->schedules->pluck('codschedule');
+
         $session = AssistanceSession::with('schedule')
+            ->whereIn('codschedule', $scheduleIds)
             ->whereDate('date', Carbon::today())
             ->whereNull('time_ending')
             ->first();
@@ -338,7 +495,7 @@ class AssistanceController extends Controller
         }
 
         // Verificar que el horario de la sesión coincida con el del estudiante
-        if ($enrollment->grade_schedule && $enrollment->grade_schedule->codschedule !== $session->codschedule) {
+        if (!$enrollment->grade_schedule || $enrollment->grade_schedule->codschedule !== $session->codschedule) {
             return response()->json([
                 'success' => false,
                 'message' => 'El estudiante no pertenece al horario de esta sesión'
@@ -391,6 +548,19 @@ class AssistanceController extends Controller
                 'status'                => $status,
                 'observation'           => $obs,
             ]);
+
+            /*
+            $studentName = $enrollment->student->person->firstname . ' ' .
+                $enrollment->student->person->lastname_father;
+
+            $time = Carbon::parse($attendance->time_entry)->format('h:i A');
+
+            $phone = $enrollment->student->person->phone;
+
+            $message = "Estimado padre, el estudiante {$studentName} registró asistencia a las {$time}.";
+
+            // Enviar a cola
+            SendWhatsAppJob::dispatchSync($phone, $message);*/
 
             return response()->json([
                 'success'     => true,
@@ -612,6 +782,7 @@ class AssistanceController extends Controller
         }
 
         $assistanceSession = AssistanceSession::with('schedule')
+            ->where('coduser', Auth::user()->coduser)
             ->whereDate('date', Carbon::today())
             ->whereNull('time_ending')
             ->first();

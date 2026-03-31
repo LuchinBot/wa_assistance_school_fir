@@ -27,6 +27,7 @@ use App\Http\Controllers\ImportStudentsController;
 use App\Http\Controllers\Guest\GuestController;
 use App\Http\Controllers\Guest\GuestApiController;
 use App\Http\Controllers\JustificationController;
+use App\Http\Controllers\UserScheduleController;
 
 Route::get('/generate-initial-data', [GenerateInsertController::class, 'generate']);
 // Al final de todas tus rutas, puedes agregar esto para capturar cualquier 404
@@ -296,6 +297,18 @@ Route::middleware(['auth'])->prefix('justification')->name('justification.')->gr
     Route::post('/search', [JustificationController::class, 'search'])->name('search');
     Route::get('/show/{id}', [JustificationController::class, 'show'])->name('show');
     Route::delete('/destroy/{id}', [JustificationController::class, 'destroy'])->name('destroy');
+
+});
+
+
+Route::middleware(['auth'])->prefix('user_schedule')->name('user_schedule.')->group(function () {
+    Route::get('/list', [UserScheduleController::class, 'index'])->name('list');
+    Route::get('/form/{id?}', [UserScheduleController::class, 'form'])->name('form');
+    Route::post('/store/{id?}', [UserScheduleController::class, 'store'])->name('store');
+    Route::get('/records/{from}/{to}/{keyword?}', [UserScheduleController::class, 'records'])->name('records');
+    Route::post('/search', [UserScheduleController::class, 'search'])->name('search');
+    Route::get('/show/{id}', [UserScheduleController::class, 'show'])->name('show');
+    Route::delete('/destroy/{id}', [UserScheduleController::class, 'destroy'])->name('destroy');
 
 });
 
