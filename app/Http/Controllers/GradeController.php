@@ -82,7 +82,10 @@ class GradeController extends Controller
                 'max:250',
                 Rule::unique('grade', 'name_large')
                     ->ignore($id, 'codgrade')
-                    ->whereNull('deleted_at'),
+                    ->where(function ($query) use ($request) {
+                        return $query->where('codlevel', $request->codlevel)
+                            ->whereNull('deleted_at');
+                    }),
             ],
             'name_short' => [
                 'nullable',
@@ -90,14 +93,16 @@ class GradeController extends Controller
                 'max:250',
                 Rule::unique('grade', 'name_short')
                     ->ignore($id, 'codgrade')
-                    ->whereNull('deleted_at'),
+                    ->where(function ($query) use ($request) {
+                        return $query->where('codlevel', $request->codlevel)
+                            ->whereNull('deleted_at');
+                    }),
             ],
             'codlevel' => [
                 'required',
                 'integer',
             ],
         ];
-
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
