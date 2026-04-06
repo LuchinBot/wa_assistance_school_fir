@@ -150,7 +150,7 @@ class LoginController extends Controller
                 "Si no reconoce esta actividad, por favor contacte al administrador de inmediato.\n\n" .
                 "--- \n" .
                 "_Mensaje automático de_ *Lubot*\n" .
-                "_Desde *SISCA*_\n"
+                "_Desde *SISCA-FIR*_\n"
         ];
 
         try {

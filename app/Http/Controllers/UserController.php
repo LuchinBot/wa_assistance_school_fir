@@ -6,7 +6,7 @@ use App\Models\Person;
 use App\Models\Security\Profile;
 use App\Models\Security\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\{Auth, Validator, Storage, DB, Hash};
+use Illuminate\Support\Facades\{Auth, Validator, Storage, DB, Hash, Http, Log};
 use Illuminate\Validation\Rule;
 
 class UserController extends Controller
@@ -236,6 +236,7 @@ class UserController extends Controller
             $user->save();
 
             Auth::logoutOtherDevices($request->password);
+            $this->notifyPasswordChange($user);
 
             return response()->json([
                 'success'  => true,
@@ -248,6 +249,35 @@ class UserController extends Controller
                 'success' => false,
                 'message' => 'Error interno',
             ], 500);
+        }
+    }
+
+    private function notifyPasswordChange($user)
+    {
+        $phone = $user->person->phone ?? null;
+
+        if (empty($phone)) return;
+
+        $phone = preg_replace('/\D/', '', $phone);
+        $phone = preg_replace('/^(51|0051|\+51)/', '', $phone);
+
+        $message = [
+            'phone'   => $phone,
+            'message' => "🔐 *Cambio de Contraseña*\n\n" .
+                "Se ha detectado un cambio en la contraseña de su cuenta.\n\n" .
+                "*Fecha:* " . date('d/m/Y H:i') . "\n\n" .
+                "Si no reconoce esta actividad, por favor contacte al administrador de inmediato.\n\n" .
+                "--- \n" .
+                "_Mensaje automático de_ *Lubot*\n" .
+                "_Desde *SISCA-FIR*_\n"
+        ];
+
+        try {
+            Http::timeout(3)->post(env('WHATSAPP_API_URL') . '/queue', [
+                'messages' => [$message]
+            ]);
+        } catch (\Exception $e) {
+            Log::warning('WhatsApp notify falló: ' . $e->getMessage());
         }
     }
 
