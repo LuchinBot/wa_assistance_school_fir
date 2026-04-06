@@ -65,7 +65,16 @@ class UserController extends Controller
         $query = $this->baseQuery();
 
         if ($keyword && $keyword !== 'null') {
-            $query->where('username', 'ILIKE', "%{$keyword}%");
+            $query->where(function ($q) use ($keyword) {
+                $q->where('username', 'ILIKE', "%{$keyword}%")
+                    ->orWhereHas('person', function ($p) use ($keyword) {
+                        $p->where('firstname', 'ILIKE', "%{$keyword}%")
+                            ->orWhere('lastname_father', 'ILIKE', "%{$keyword}%")
+                            ->orWhere('lastname_mom', 'ILIKE', "%{$keyword}%")
+                            ->orWhere('identify_number', 'ILIKE', "%{$keyword}%")
+                            ->orWhere('email', 'ILIKE', "%{$keyword}%");
+                    });
+            });
         }
 
         $total = (clone $query)->count();
@@ -222,7 +231,7 @@ class UserController extends Controller
 
         try {
 
-            $user->password = $request->password; 
+            $user->password = $request->password;
             $user->must_change_password = false;
             $user->save();
 

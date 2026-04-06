@@ -246,11 +246,12 @@ class StudentController extends Controller
                 $q->where('codstudent', 'ILIKE', "%{$keyword}%")
                     ->orWhereHas('person', function ($p) use ($keyword) {
                         $p->where('firstname', 'ILIKE', "%{$keyword}%")
-                            ->orWhere('lastname_father', 'ILIKE', "%{$keyword}%");
+                            ->orWhere('lastname_father', 'ILIKE', "%{$keyword}%")
+                            ->orWhere('lastname_mom', 'ILIKE', "%{$keyword}%")
+                            ->orWhere('identify_number', 'ILIKE', "%{$keyword}%");
                     });
             });
         }
-
 
         if ($periodId) {
             $query->whereHas('enrollments', function ($q) use ($periodId) {
@@ -293,7 +294,9 @@ class StudentController extends Controller
                 $q->where('codstudent', 'ILIKE', "%{$keyword}%")
                     ->orWhereHas('person', function ($p) use ($keyword) {
                         $p->where('firstname', 'ILIKE', "%{$keyword}%")
-                            ->orWhere('lastname_father', 'ILIKE', "%{$keyword}%");
+                            ->orWhere('lastname_father', 'ILIKE', "%{$keyword}%")
+                            ->orWhere('lastname_mom', 'ILIKE', "%{$keyword}%")
+                            ->orWhere('identify_number', 'ILIKE', "%{$keyword}%");
                     });
             });
         }

@@ -28,6 +28,7 @@ use App\Http\Controllers\Guest\GuestController;
 use App\Http\Controllers\Guest\GuestApiController;
 use App\Http\Controllers\JustificationController;
 use App\Http\Controllers\UserScheduleController;
+use App\Http\Controllers\Report\WeekingReportController;
 
 Route::get('/generate-initial-data', [GenerateInsertController::class, 'generate']);
 // Al final de todas tus rutas, puedes agregar esto para capturar cualquier 404
@@ -310,6 +311,15 @@ Route::middleware(['auth'])->prefix('user_schedule')->name('user_schedule.')->gr
     Route::get('/show/{id}', [UserScheduleController::class, 'show'])->name('show');
     Route::delete('/destroy/{id}', [UserScheduleController::class, 'destroy'])->name('destroy');
 
+});
+
+///---------- RUTAS PARA REPORTES ---------
+Route::middleware(['auth'])->prefix('report')->name('report.')->group(function () {
+    Route::get('/weeking',            [WeekingReportController::class, 'index'])->name('weeking.list');
+    Route::get('/weeking/summary/records/{from}/{to}/{keyword?}', [WeekingReportController::class, 'summary'])->name('weeking.summary');
+    Route::get('/weeking/records/{from}/{to}/{keyword?}',         [WeekingReportController::class, 'records'])->name('weeking.records');
+    Route::get('/weeking/sections',   [WeekingReportController::class, 'sectionsByGrade'])->name('weeking.sections');
+    Route::get('/weeking/export/pdf', [WeekingReportController::class, 'exportPdf'])->name('weeking.export.pdf');
 });
 
 
