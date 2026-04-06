@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use App\Models\Security\User;
+use Illuminate\Support\Facades\Http;
 
 class LoginController extends Controller
 {
@@ -32,7 +33,7 @@ class LoginController extends Controller
             return redirect('/');
         }
 
-          return view('auth.login', [
+        return view('auth.login', [
             'extend' => $this->extend,
         ]);
     }
@@ -122,11 +123,43 @@ class LoginController extends Controller
             ]);
         }
 
+
+        // AVISAR AL USUARIO SU NUMERO DE CELUALR
+        $this->notifySession($user);
         return response()->json([
             'code'     => 200,
             'msg'      => 'Inicio de sesión correcto',
             'redirect' => 'home',
         ]);
+    }
+
+    private function notifySession($user)
+    {
+        $phone = $user->person->phone ?? null;
+
+        if (empty($phone)) return;
+
+        $phone = preg_replace('/\D/', '', $phone);
+        $phone = preg_replace('/^(51|0051|\+51)/', '', $phone);
+
+        $message = [
+            'phone'   => $phone,
+            'message' => "🔐 *Notificación de Seguridad*\n\n" .
+                "Se ha detectado un nuevo inicio de sesión en su cuenta.\n\n" .
+                "*Fecha:* " . date('d/m/Y H:i') . "\n\n" .
+                "Si no reconoce esta actividad, por favor contacte al administrador de inmediato.\n\n" .
+                "--- \n" .
+                "_Mensaje automático de_ *Lubot*\n" .
+                "_Desde *SISCA*_\n"
+        ];
+
+        try {
+            Http::timeout(3)->post(env('WHATSAPP_API_URL') . '/queue', [
+                'messages' => [$message]
+            ]);
+        } catch (\Exception $e) {
+            Log::warning('WhatsApp notify falló: ' . $e->getMessage());
+        }
     }
 
     private function invalidCredentials()
