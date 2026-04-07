@@ -208,8 +208,8 @@ class UserController extends Controller
                     'phone' => $phone,
                     'message' =>
                     "👋 Hola *{$name}*\n\n" .
-                        "Te damos la bienvenida al sistema de las *Olimpiadas Escolares IV - CTI*.\n\n" .
-                        "🌐 Web: olimpiadas.ctiunsm.com\n" .
+                        "Te damos la bienvenida al *Sistema de Control de Asistencia - CTI*.\n\n" .
+                        "🌐 Web: iefir.ctiunsm.com\n" .
                         "👤 Usuario: {$user->username}\n" .
                         "🔑 Contraseña: {$request->password}\n\n" .
                         "Por favor, cambia tu contraseña al ingresar.\n\n" .
