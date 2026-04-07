@@ -126,7 +126,6 @@ class UserController extends Controller
                 'min:8',
                 'max:20',
                 'regex:/^[a-zA-Z0-9_-]+$/',
-                Rule::unique('user', 'username')->ignore($id, 'coduser'),
             ],
             'password'   => $id
                 ? ['nullable', 'confirmed', 'min:8']
@@ -140,21 +139,93 @@ class UserController extends Controller
         }
 
         return DB::transaction(function () use ($request, $id) {
+
             $data = $request->only(['codprofile', 'codperson', 'username']);
             $data['is_super'] = $request->codprofile == 1 ? 'Y' : 'N';
 
             if ($request->filled('password')) {
-                $data['password']             = $request->password; // mutator hashea
+                $data['password']             = $request->password;
                 $data['must_change_password'] = true;
             }
 
-            if ($id) {
-                $user    = User::findOrFail($id);
+            // 🔥 SOLO PARA CREACIÓN
+            if (!$id) {
+
+                // 👉 Buscar incluso eliminados
+                $userDeleted = User::withTrashed()
+                    ->where('username', $request->username)
+                    ->first();
+
+                if ($userDeleted && $userDeleted->trashed()) {
+                    // 💥 RESTAURAR
+                    $userDeleted->restore();
+                    $userDeleted->update($data);
+
+                    $user = $userDeleted;
+                    $message = 'Usuario restaurado correctamente';
+                } else {
+                    // 👉 CREAR NUEVO
+                    $user = User::create($data);
+                    $message = 'Creado correctamente';
+                }
+            } else {
+                // 👉 UPDATE NORMAL
+                $user = User::findOrFail($id);
                 $user->update($data);
                 $message = 'Actualizado correctamente';
-            } else {
-                $user    = User::create($data);
-                $message = 'Creado correctamente';
+            }
+
+            // 🚀 Enviar WhatsApp SOLO cuando es nuevo o restaurado
+            if (!$id) {
+
+                $person = $user->person;
+
+                if (!$person) {
+                    return response()->json([
+                        'message' => 'Usuario sin persona asociada'
+                    ]);
+                }
+
+                $phone = preg_replace('/\D/', '', $person->phone);
+                $phone = preg_replace('/^(51|0051|\+51)/', '', $phone);
+
+                if (strlen($phone) !== 9) {
+                    return response()->json([
+                        'message' => 'Teléfono inválido'
+                    ]);
+                }
+
+                $name = trim(
+                    $person->firstname . ' ' .
+                        $person->lastname_father . ' ' .
+                        $person->lastname_mom
+                );
+
+                $dni = $person->identify_number ?? 'N/A';
+                $owner = Auth::user()->person ? Auth::user()->person->firstname : 'Admin';
+
+                $msg_wsp = [
+                    'phone' => $phone,
+                    'message' =>
+                    "👋 Hola *{$name}*\n\n" .
+                        "Te damos la bienvenida al sistema de las *Olimpiadas Escolares IV - CTI*.\n\n" .
+                        "🌐 Web: olimpiadas.ctiunsm.com\n" .
+                        "👤 Usuario: {$user->username}\n" .
+                        "🔑 Contraseña: {$request->password}\n\n" .
+                        "Por favor, cambia tu contraseña al ingresar.\n\n" .
+                        "_*By: {$owner}*_"
+                ];
+
+                $response = Http::post(env('WHATSAPP_API_URL') . '/queue', [
+                    'messages' => [$msg_wsp]
+                ]);
+
+                if (!$response->successful()) {
+                    return response()->json([
+                        'message' => 'Error enviando WhatsApp',
+                        'error' => $response->body()
+                    ], 500);
+                }
             }
 
             return response()->json([
