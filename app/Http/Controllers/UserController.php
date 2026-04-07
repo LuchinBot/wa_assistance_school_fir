@@ -101,7 +101,7 @@ class UserController extends Controller
             ->where('codprofile', '!=', 1)
             ->get();
 
-        $persons = Person::select('codperson', 'firstname', 'lastname_father')->get();
+        $persons = Person::select('codperson', 'firstname', 'lastname_father', 'lastname_mom', 'identify_number')->get();
         $extend  = array_merge($this->getExtend(), ['view' => 'form']);
 
         return view('user.form', [

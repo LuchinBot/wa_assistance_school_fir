@@ -61,7 +61,7 @@
                                         style="background: #f8fafc; border: 1px solid #e2e8f0;"
                                         onfocus="this.style.background='white'; this.style.borderColor='rgba(0,176,202,0.5)'; this.style.boxShadow='0 0 0 3px rgba(0,176,202,0.08)';"
                                         onblur="this.style.background='#f8fafc'; this.style.borderColor='#e2e8f0'; this.style.boxShadow='none';">
-                                        <option value=""></option>
+                                        <option value="">Seleccione...</option>
                                         @foreach ($profiles as $profile)
                                             <option value="{{ $profile->codprofile }}"
                                                 {{ isset($user) && $user->codprofile == $profile->codprofile ? 'selected' : '' }}>
@@ -93,11 +93,11 @@
                                         style="background: #f8fafc; border: 1px solid #e2e8f0;"
                                         onfocus="this.style.background='white'; this.style.borderColor='rgba(0,176,202,0.5)'; this.style.boxShadow='0 0 0 3px rgba(0,176,202,0.08)';"
                                         onblur="this.style.background='#f8fafc'; this.style.borderColor='#e2e8f0'; this.style.boxShadow='none';">
-                                        <option value=""></option>
+                                        <option value="">Seleccione...</option>
                                         @foreach ($persons as $person)
                                             <option value="{{ $person->codperson }}"
                                                 {{ isset($user) && $user->codperson == $person->codperson ? 'selected' : '' }}>
-                                                {{ $person->firstname }} {{ $person->lastname_father }}
+                                                {{ $person->identify_number }} - {{ $person->firstname }} {{ $person->lastname_father }}
                                                 {{ $person->lastname_mom }}
                                             </option>
                                         @endforeach
