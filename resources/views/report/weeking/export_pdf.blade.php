@@ -489,7 +489,7 @@
             <div class="header-divider">&nbsp;</div>
 
             <div class="header-info">
-                <div class="header-institution">INSTITUCIÓN EDUCATIVA SANTA ROSA</div>
+                <div class="header-institution">I.E. FRANCISCO IZQUIERDO RÍOS</div>
                 <div class="header-title">Reporte Semanal de Asistencia</div>
                 <div class="header-subtitle">
                     Documento generado automáticamente · {{ now()->isoFormat('D [de] MMMM [de] YYYY') }}

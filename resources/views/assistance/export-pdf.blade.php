@@ -394,7 +394,7 @@
 
             {{-- Centro: nombre institución + título reporte --}}
             <div class="header-info">
-                <div class="header-institution">INSTITUCIÓN EDUCATIVA SANTA ROSA</div>
+                <div class="header-institution">I.E. FRANCISCO IZQUIERDO RÍOS</div>
                 <div class="header-title">Reporte de Asistencias</div>
                 <div class="header-subtitle">Documento generado automáticamente · {{ now()->format('d \d\e F \d\e Y') }}
                 </div>

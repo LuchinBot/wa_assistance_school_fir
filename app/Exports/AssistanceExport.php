@@ -146,7 +146,7 @@ trait InstitutionHeader
         ]);
 
         // ── Nombre institución ────────────────────────────────────────
-        $sheet->setCellValue("{$midStart}2", 'INSTITUCIÓN EDUCATIVA SANTA ROSA');
+        $sheet->setCellValue("{$midStart}2", 'I.E. FRANCISCO IZQUIERDO RÍOS');
         $sheet->getStyle("{$midStart}2")->applyFromArray([
             'font' => [
                 'bold'  => true,

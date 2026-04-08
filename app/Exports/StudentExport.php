@@ -67,7 +67,7 @@ trait StudentInstitutionHeader
             'borders' => ['outline' => ['borderStyle' => Border::BORDER_THIN, 'color' => ['argb' => 'FFE2E8F0']]],
         ]);
 
-        $sheet->setCellValue("{$midStart}2", 'INSTITUCIÓN EDUCATIVA SANTA ROSA');
+        $sheet->setCellValue("{$midStart}2", 'I.E. FRANCISCO IZQUIERDO RÍOS');
         $sheet->getStyle("{$midStart}2")->applyFromArray([
             'font'      => ['bold' => true, 'size' => 16, 'name' => 'Arial', 'color' => ['argb' => 'FF1E293B']],
             'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER, 'vertical' => Alignment::VERTICAL_CENTER],
