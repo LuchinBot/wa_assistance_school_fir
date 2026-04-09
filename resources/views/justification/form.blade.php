@@ -64,7 +64,7 @@
                                     style="background: #f8fafc; border: 1px solid #e2e8f0;"
                                     onfocus="this.style.background='white'; this.style.borderColor='rgba(0,176,202,0.5)'; this.style.boxShadow='0 0 0 3px rgba(0,176,202,0.08)';"
                                     onblur="this.style.background='#f8fafc'; this.style.borderColor='#e2e8f0'; this.style.boxShadow='none';">
-                                    <option value=""></option>
+                                    <option value="">Seleccione...</option>
                                     @foreach ($enrollments as $en)
                                         <option value="{{ $en->codenrollment }}"
                                             {{ isset($justification) && $justification->codenrollment == $en->codenrollment ? 'selected' : '' }}>
@@ -89,7 +89,7 @@
                                     style="background: #f8fafc; border: 1px solid #e2e8f0;"
                                     onfocus="this.style.background='white'; this.style.borderColor='rgba(0,176,202,0.5)'; this.style.boxShadow='0 0 0 3px rgba(0,176,202,0.08)';"
                                     onblur="this.style.background='#f8fafc'; this.style.borderColor='#e2e8f0'; this.style.boxShadow='none';">
-                                    <option value=""></option>
+                                    <option value="">Seleccione...</option>
                                     <option value="JT"
                                         {{ isset($justification) && $justification->type == 'JT' ? 'selected' : '' }}>
                                         Temporal
