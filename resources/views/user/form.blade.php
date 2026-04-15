@@ -130,15 +130,15 @@
                                 </div>
 
                                 @if (!isset($user))
-                                    {{-- Password --}}
+                                    {{-- Password onpaste="return false" oncopy="return false"
+                                                oncut="return false" --}}
                                     <div class="space-y-1.5">
                                         <label for="password" class="text-xs font-medium text-slate-500">
                                             Contraseña <span class="text-red-400">*</span>
                                         </label>
                                         <div class="relative">
                                             <input type="password" id="password" name="password" placeholder="••••••••"
-                                                autocomplete="new-password" onpaste="return false" oncopy="return false"
-                                                oncut="return false"
+                                                autocomplete="new-password"
                                                 class="w-full h-10 px-3.5 pr-10 text-sm text-slate-700 rounded-md outline-none transition-all duration-200 placeholder:text-slate-300"
                                                 style="background: #f8fafc; border: 1px solid #e2e8f0;"
                                                 onfocus="this.style.background='white'; this.style.borderColor='rgba(0,176,202,0.5)'; this.style.boxShadow='0 0 0 3px rgba(0,176,202,0.08)';"
@@ -154,7 +154,7 @@
                                             data-error-for="password"></span>
                                     </div>
 
-                                    {{-- Confirmar password --}}
+                                    {{-- Confirmar password   autocomplete="new-password" onpaste="return false" oncopy="return false" oncut="return false"  --}}
                                     <div class="space-y-1.5">
                                         <label for="password_confirmation" class="text-xs font-medium text-slate-500">
                                             Confirmar contraseña <span class="text-red-400">*</span>
@@ -162,8 +162,7 @@
                                         <div class="relative">
                                             <input type="password" id="password_confirmation"
                                                 name="password_confirmation" placeholder="••••••••"
-                                                autocomplete="new-password" onpaste="return false" oncopy="return false"
-                                                oncut="return false"
+                                                autocomplete="new-password"
                                                 class="w-full h-10 px-3.5 pr-10 text-sm text-slate-700 rounded-md outline-none transition-all duration-200 placeholder:text-slate-300"
                                                 style="background: #f8fafc; border: 1px solid #e2e8f0;"
                                                 onfocus="this.style.background='white'; this.style.borderColor='rgba(0,176,202,0.5)'; this.style.boxShadow='0 0 0 3px rgba(0,176,202,0.08)';"
