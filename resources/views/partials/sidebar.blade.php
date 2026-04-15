@@ -7,7 +7,7 @@
         <a href="{{ route('home') }}" class="flex items-center gap-2.5">
             <div
                 class="w-8 h-8 p-1 rounded-md overflow-hidden flex-shrink-0 bg-blue-50 border border-blue-200 flex items-center justify-center">
-                <img src="img/logo.svg" alt="">
+                <img src="{{ asset('img/logo.svg') }}" alt="Logo">
             </div>
             <span class="text-[14px] font-bold text-black">Assistance School</span>
         </a>
