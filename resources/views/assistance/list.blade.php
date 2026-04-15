@@ -19,7 +19,7 @@
                         <h1 class="text-xl font-bold text-slate-800 leading-none">
                             {{ $extend['title'] }}
                         </h1>
-                        <p class="text-xs text-gray-500 mt-0.5 font-normal">
+                        <p class="text-sm text-gray-500 mt-0.5 font-normal">
                             Gestiona los registros de {{ strtolower($extend['title']) }}.
                         </p>
                     </div>
@@ -38,10 +38,9 @@
                                         <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
                                     </span>
                                     <div class="leading-tight">
-                                        <p class="text-[11px] font-black text-green-700">Horario activo</p>
-                                        <p class="text-[10px] font-medium" style="color: rgba(21,128,61,0.7);">
+                                        <p class="text-sm font-black text-green-700">Horario activo <span class="font-normal hidden"> (desde {{ \Carbon\Carbon::parse($opening->time_opening)->format('h:i A') }})</span></p>
+                                        <p class="text-xs font-medium" style="color: rgba(21,128,61,0.7);">
                                             {{ $opening->schedule->turn ?? 'Sin turno' }}
-                                            · {{ \Carbon\Carbon::parse($opening->time_opening)->format('h:i A') }}
                                         </p>
                                     </div>
                                 </div>
@@ -99,7 +98,7 @@
                             onblur="this.parentElement.style.borderColor='#e2e8f0'; document.getElementById('searchIcon').style.color='#94a3b8';">
                         <button id="btnClearSearch" class="hidden flex-shrink-0" style="color: #94a3b8;"
                             onmouseover="this.style.color='rgb(220,50,50)';" onmouseout="this.style.color='#94a3b8';">
-                            <span class="material-symbols-outlined text-[15px]">close</span>
+                            <span class="material-symbols-outlined text-sm">close</span>
                         </button>
                     </div>
 
@@ -108,12 +107,12 @@
                         style="border: 1px solid #e2e8f0;">
                         <button id="tab-present" class="h-8 px-3 text-xs font-bold transition-all flex items-center gap-1"
                             style="background: rgb(0,176,202); color: white;">
-                            <span class="material-symbols-outlined text-[13px]">how_to_reg</span>
+                            <span class="material-symbols-outlined text-sm">how_to_reg</span>
                             <span class="hidden sm:inline">Presentes</span>
                         </button>
                         <button id="tab-absent" class="h-8 px-3 text-xs font-bold transition-all flex items-center gap-1"
                             style="background: white; color: #94a3b8;">
-                            <span class="material-symbols-outlined text-[13px]">person_off</span>
+                            <span class="material-symbols-outlined text-sm">person_off</span>
                             <span class="hidden sm:inline">Ausentes</span>
                         </button>
                     </div>
@@ -121,7 +120,7 @@
                     <div class="flex-1 hidden sm:block"></div>
 
                     {{-- Contador --}}
-                    <p class="text-xs font-medium hidden sm:block flex-shrink-0" style="color: #94a3b8;">
+                    <p class="text-xs font-medium flex-shrink-0" style="color: #94a3b8;">
                         <span class="font-black text-slate-600" id="totalRecord">{{ $extend['totalRecord'] }}</span>
                         registros
                     </p>
@@ -133,7 +132,7 @@
                             style="background: rgba(34,197,94,0.08); color: rgb(22,163,74); border: 1px solid rgba(34,197,94,0.2);"
                             onmouseover="this.style.background='rgba(34,197,94,0.15)';"
                             onmouseout="this.style.background='rgba(34,197,94,0.08)';" title="Exportar Excel">
-                            <span class="material-symbols-outlined text-[15px]">table_view</span>
+                            <span class="material-symbols-outlined text-sm">table_view</span>
                             <span class="hidden md:inline">Excel</span>
                         </button>
                         <button id="btn-export-pdf"
@@ -141,16 +140,16 @@
                             style="background: rgba(239,68,68,0.08); color: rgb(220,50,50); border: 1px solid rgba(239,68,68,0.2);"
                             onmouseover="this.style.background='rgba(239,68,68,0.15)';"
                             onmouseout="this.style.background='rgba(239,68,68,0.08)';" title="Exportar PDF">
-                            <span class="material-symbols-outlined text-[15px]">picture_as_pdf</span>
+                            <span class="material-symbols-outlined text-sm">picture_as_pdf</span>
                             <span class="hidden md:inline">PDF</span>
                         </button>
                     </div>
 
                     {{-- Botón toggle filtros (mobile) --}}
                     <button id="btn-toggle-filters"
-                        class="flex items-center gap-1 h-8 px-2.5 rounded-lg text-xs font-semibold transition-all flex-shrink-0 sm:hidden"
+                        class="flex items-center gap-1 h-8 px-2.5 rounded-lg text-sm font-semibold transition-all flex-shrink-0 sm:hidden"
                         style="background: #f4f6f8; color: #64748b; border: 1px solid #e2e8f0;">
-                        <span class="material-symbols-outlined text-[15px]">tune</span>
+                        <span class="material-symbols-outlined text-sm">tune</span>
                         Filtros
                     </button>
                 </div>
@@ -306,20 +305,6 @@
     </div>
 
 
-    {{-- MODAL PREVIEW IMAGEN --}}
-    <div id="previewModal" class="fixed inset-0 z-[110] hidden overflow-hidden"
-        style="background: rgba(15,25,50,0.9); backdrop-filter: blur(8px);">
-        <span
-            class="material-symbols-outlined absolute top-5 right-5 text-4xl text-white cursor-pointer z-[120] transition-colors"
-            id="closePreviewModal" onmouseover="this.style.color='rgb(0,176,202)'"
-            onmouseout="this.style.color='white'">close</span>
-        <div class="flex justify-center items-center w-full h-full p-4">
-            <div class="bg-white p-2 rounded-xl shadow-2xl overflow-hidden" style="max-width: 90%; max-height: 90%;">
-                <img src="" alt="Imagen" class="max-w-full max-h-[80vh] object-contain">
-            </div>
-        </div>
-    </div>
-
 
     {{-- MODAL ELIMINAR --}}
     <div id="deleteModal"
@@ -374,8 +359,8 @@
                     <span class="material-symbols-outlined text-[17px] text-green-500">event_available</span>
                 </div>
                 <div>
-                    <p class="text-sm font-black text-slate-800 leading-none">Aperturar asistencia</p>
-                    <p class="text-[11px] text-slate-400 mt-0.5">Crear nueva toma de asistencia</p>
+                    <p class="text-md font-black text-slate-800 leading-none">Aperturar asistencia</p>
+                    <p class="text-xs text-slate-400 mt-0.5">Crear nueva toma de asistencia</p>
                 </div>
             </div>
 
@@ -384,10 +369,10 @@
 
                     {{-- Fecha informativa --}}
                     <div class="flex items-center gap-3 px-4 py-3 rounded-lg"
-                        style="background: #f8fafc; border: 1px solid #e8edf2;">
+                        style="background: #edeff1; border: 1px solid #e8edf2;">
                         <span class="material-symbols-outlined text-[17px]" style="color: #94a3b8;">calendar_today</span>
                         <div>
-                            <p class="text-[10px] font-black uppercase tracking-widest" style="color: #94a3b8;">Fecha de
+                            <p class="text-xs font-black uppercase tracking-widest" style="color: #94a3b8;">Fecha de
                                 apertura</p>
                             <p id="opening_date_label" class="text-[13px] font-bold text-slate-700"></p>
                         </div>
@@ -395,7 +380,7 @@
 
                     {{-- Schedule --}}
                     <div>
-                        <label class="text-xs font-bold text-slate-500 block mb-1">Horarios disponibles</label>
+                        <label class="text-sm font-bold text-slate-500 block mb-1">Horarios disponibles</label>
                         <select name="codschedule" id="codschedule"
                             class="w-full h-10 rounded-lg px-3 text-sm outline-none transition-colors"
                             style="border: 1px solid #e2e8f0; color: #334155;"
@@ -413,11 +398,11 @@
 
                 <div class="px-5 pb-5 flex gap-2">
                     <button type="button" id="closeOpeningModal"
-                        class="flex-1 h-9 rounded-lg text-xs font-bold text-slate-600 transition-all active:scale-95 bg-slate-100 hover:bg-slate-200">
+                        class="flex-1 h-9 rounded-lg text-sm font-bold text-slate-600 transition-all active:scale-95 bg-slate-100 hover:bg-slate-200">
                         Cancelar
                     </button>
                     <button type="submit"
-                        class="flex-1 h-9 rounded-lg text-white text-xs font-bold transition-all active:scale-95"
+                        class="flex-1 h-9 rounded-lg text-white text-sm font-bold transition-all active:scale-95"
                         style="background: rgb(34,197,94);" onmouseover="this.style.background='rgb(22,163,74)';"
                         onmouseout="this.style.background='rgb(34,197,94)';">
                         Aperturar
@@ -440,21 +425,21 @@
                     <span class="material-symbols-outlined text-[17px] text-red-500">lock</span>
                 </div>
                 <div>
-                    <p class="text-sm font-black text-slate-800 leading-none">Finalizar asistencia?</p>
-                    <p class="text-[11px] text-slate-400 mt-0.5">Esta acción no se puede deshacer</p>
+                    <p class="text-md font-black text-slate-800 leading-none">¿Finalizar asistencia?</p>
+                    <p class="text-xs text-slate-400 mt-0.5">Esta acción no se puede deshacer</p>
                 </div>
             </div>
 
-            <div class="px-5 py-4 space-y-3">
-                <p class="text-sm text-slate-500">Se registrará la hora de finalización de la asistencia:</p>
+            <div class="px-5 pb-4 space-y-1">
+                <p class="text-sm text-slate-500 hidden">Se registrará la hora de finalización de la asistencia:</p>
                 @if ($opening)
                     <div class="flex items-center gap-3 px-4 py-3 rounded-lg"
                         style="background: #f8fafc; border: 1px solid #e8edf2;">
                         <span class="material-symbols-outlined text-[17px]" style="color: #94a3b8;">schedule</span>
                         <div>
-                            <p class="text-[10px] font-black uppercase tracking-widest" style="color: #94a3b8;">Asistencia
+                            <p class="text-xs font-black uppercase tracking-widest" style="color: #94a3b8;">Asistencia
                                 aperturada desde</p>
-                            <p class="text-[13px] font-bold text-slate-700">
+                            <p class="text-sm font-bold text-slate-700 truncate">
                                 {{ \Carbon\Carbon::parse($opening->time_opening)->format('h:i A') }}
                                 · {{ $opening->schedule->turn ?? 'Sin turno' }}
                             </p>

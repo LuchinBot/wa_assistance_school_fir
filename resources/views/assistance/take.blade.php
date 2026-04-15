@@ -66,7 +66,7 @@
             <div class="att-manual ">
                 <div class="att-manual-inner">
                     <span class="material-symbols-outlined att-manual-icon">badge</span>
-                    <input type="text" id="manual-dni" class="att-manual-input" placeholder="DNI del estudiante"
+                    <input type="text" id="manual-dni" class="att-manual-input" placeholder="Digíte el documento"
                         maxlength="20" autocomplete="off" inputmode="numeric" />
                     <button type="button" id="manual-btn" class="att-manual-btn">
                         <span class="material-symbols-outlined" style="font-size:1.1rem;">send</span>
@@ -96,7 +96,7 @@
                     <span class="material-symbols-outlined att-late-icon" style="color:#22c55e;">alarm_on</span>
                     <div class="att-late-text">
                         <span class="att-late-title">Llegó temprano</span>
-                        <span class="att-late-sub">Tomado después, registra hora límite</span>
+                        <span class="att-late-sub">Registra hora límite</span>
                     </div>
                     <label class="att-toggle" onclick="event.stopPropagation()">
                         <input type="checkbox" id="early-toggle">
@@ -402,7 +402,7 @@
             align-items: center;
             gap: .5rem;
             background: #f8fafc;
-            border: 1px solid #e2e8f0;
+            border: 1px solid #caced4;
             border-radius: .85rem;
             padding: .55rem .55rem .55rem .85rem;
             transition: border-color .2s, box-shadow .2s;
@@ -415,7 +415,7 @@
         }
 
         .att-manual-icon {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             color: #94a3b8;
             flex-shrink: 0;
         }
@@ -425,14 +425,13 @@
             background: transparent;
             border: none;
             outline: none;
-            font-size: .9rem;
+            font-size: 1.02rem;
             font-weight: 600;
             color: #1e293b;
-            letter-spacing: .04em;
         }
 
         .att-manual-input::placeholder {
-            color: #cbd5e1;
+            color: #9fa8b2;
             font-weight: 400;
         }
 
@@ -467,7 +466,7 @@
             align-items: center;
             gap: .65rem;
             background: #f8fafc;
-            border: 1px solid #e8edf2;
+            border: 1px solid #caced4;
             border-radius: .85rem;
             padding: .6rem .85rem;
             cursor: pointer;
@@ -492,15 +491,15 @@
 
         .att-late-title {
             display: block;
-            font-size: .8rem;
+            font-size: .9rem;
             font-weight: 700;
             color: #1e293b;
         }
 
         .att-late-sub {
             display: block;
-            font-size: .65rem;
-            color: #94a3b8;
+            font-size: .72rem;
+            color: #6d7886;
             margin-top: .05rem;
         }
 

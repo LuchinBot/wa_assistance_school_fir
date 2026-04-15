@@ -19,7 +19,7 @@
                         <h1 class="text-xl font-bold text-slate-800 leading-none">
                             {{ $extend['title'] }}
                         </h1>
-                        <p class="text-xs text-gray-500 mt-0.5 font-normal">
+                        <p class="text-sm text-gray-500 mt-0.5 font-normal">
                             Gestiona los registros de {{ strtolower($extend['title']) }}.
                         </p>
                     </div>

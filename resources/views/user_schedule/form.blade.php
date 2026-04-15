@@ -57,7 +57,7 @@
                                     Horario <span class="text-red-400">*</span>
                                 </label>
                                 <select id="codschedule" name="codschedule"
-                                    class="tom-select flex-1 min-w-0 h-10 text-sm text-slate-700 rounded-md outline-none transition-all duration-200 appearance-none"
+                                    class="tom-select flex-1 min-w-0 h-10 px-0 text-sm text-black rounded-md outline-none transition-all duration-200 appearance-none"
                                     style="background: #f8fafc; border: 1px solid #e2e8f0;"
                                     onfocus="this.style.background='white'; this.style.borderColor='rgba(0,176,202,0.5)'; this.style.boxShadow='0 0 0 3px rgba(0,176,202,0.08)';"
                                     onblur="this.style.background='#f8fafc'; this.style.borderColor='#e2e8f0'; this.style.boxShadow='none';">
@@ -77,7 +77,7 @@
                                 <label for="coduser" class="flex items-center gap-1 text-xs text-slate-500">
                                     Usuario Asignado <span class="text-red-400">*</span>
                                 </label> <select id="coduser" name="coduser"
-                                    class="tom-select flex-1 min-w-0 h-10 text-sm text-slate-700 rounded-md outline-none transition-all duration-200 appearance-none"
+                                    class="tom-select flex-1 min-w-0 h-10 px-0 text-sm text-black rounded-md outline-none transition-all duration-200 appearance-none"
                                     style="background: #f8fafc; border: 1px solid #e2e8f0;"
                                     onfocus="this.style.background='white'; this.style.borderColor='rgba(0,176,202,0.5)'; this.style.boxShadow='0 0 0 3px rgba(0,176,202,0.08)';"
                                     onblur="this.style.background='#f8fafc'; this.style.borderColor='#e2e8f0'; this.style.boxShadow='none';">

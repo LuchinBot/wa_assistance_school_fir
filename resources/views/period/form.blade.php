@@ -1,28 +1,28 @@
 @extends('layouts.app')
 
-@section('title', (env('APP_NAME') ?? 'SCA') . ' - ' . $extend['title'])
+@section('title', (env('APP_NAME') ?? 'Assistance School') . ' - ' . $extend['title'])
+@section('navbar_breadcrumb')
+    <div class="flex items-center justify-between gap-4 flex-1">
 
-@section('content')
-    <div class="container mx-auto px-2 sm:px-4 py-6 md:py-8">
-        <div class="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <div class="flex items-center gap-3 sm:gap-4 w-full sm:w-auto">
+        <div class="flex items-center gap-3">
+            {{-- Breadcrumb --}}
+            <div class="flex items-center gap-2 text-sm">
                 <a href="{{ route($extend['controller'] . '.list') }}"
-                    class="group flex items-center justify-center min-w-[40px] w-10 h-10 bg-white border border-slate-200 rounded-xl text-slate-600 hover:bg-slate-900 hover:text-white transition-all shadow-sm flex-shrink-0">
-                    <span class="material-symbols-outlined group-hover:-translate-x-1 transition-transform">arrow_back</span>
+                    class="font-medium text-slate-400 hover:text-slate-600 transition-colors">
+                    {{ $extend['title'] }}
                 </a>
-                <div class="flex-1 min-w-0">
-                    <h1 class="text-xl sm:text-2xl md:text-3xl font-bold text-slate-900 tracking-tighter leading-tight">
-                        {{ isset($period) ? 'Editar' : 'Nuevo' }} <span
-                            class="text-blue-600">{{ $extend['title_form'] }}</span>
-                    </h1>
-                    <p class="text-slate-500 font-medium text-xs sm:text-sm mt-1">Completa los campos básicos del periodo</p>
-                </div>
+                <span class="material-symbols-outlined text-md text-slate-300">chevron_right</span>
+                <span class="font-semibold text-slate-700">
+                    {{ isset($user) ? 'Editar ' . $extend['title_form'] : 'Nuevo ' . $extend['title_form'] }}
+                </span>
             </div>
         </div>
-
-        <div id="alertContainer"
-            class="fixed top-20 right-0 left-0 sm:left-auto sm:right-5 z-[100] px-4 sm:px-0 sm:min-w-[380px]"></div>
-
+    </div>
+@endsection
+@section('content')
+    <div class="px-2 md:px-7 py-0">
+        {{-- ALERT CONTAINER --}}
+        <div id="alertContainer" class="fixed top-20 right-1 md:right-5 z-[100] w-full max-w-sm pointer-events-none"></div>
         <form id="mainForm" class="space-y-6">
             @csrf
             <input type="hidden" id="recordId" value="{{ $period->codperiod ?? '' }}">

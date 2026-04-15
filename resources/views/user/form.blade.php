@@ -1,40 +1,28 @@
 @extends('layouts.app')
 
 @section('title', (env('APP_NAME') ?? 'Assistance School') . ' - ' . $extend['title'])
+@section('navbar_breadcrumb')
+    <div class="flex items-center justify-between gap-4 flex-1">
 
-@section('content')
-    <div class="min-h-screen" style="background: #f4f6f8;">
-
-        {{-- TOPBAR --}}
-        <div class="bg-white px-6 lg:px-10 py-4 flex items-center gap-4" style="border-bottom: 1px solid #e8edf2;">
-            <a href="{{ route($extend['controller'] . '.list') }}"
-                class="group flex items-center justify-center w-8 h-8 rounded-lg flex-shrink-0 transition-all duration-200 active:scale-95 bg-slate-100 hover:bg-slate-200">
-                <span
-                    class="material-symbols-outlined text-[17px] text-slate-500 group-hover:-translate-x-0.5 transition-transform">
-                    arrow_back
-                </span>
-            </a>
-            <div class="w-px h-5 bg-slate-200 flex-shrink-0"></div>
+        <div class="flex items-center gap-3">
+            {{-- Breadcrumb --}}
             <div class="flex items-center gap-2 text-sm">
                 <a href="{{ route($extend['controller'] . '.list') }}"
                     class="font-medium text-slate-400 hover:text-slate-600 transition-colors">
                     {{ $extend['title'] }}
                 </a>
-                <span class="material-symbols-outlined text-[14px] text-slate-300">chevron_right</span>
+                <span class="material-symbols-outlined text-md text-slate-300">chevron_right</span>
                 <span class="font-semibold text-slate-700">
-                    {{ isset($user) ? 'Editar usuario' : 'Nuevo usuario' }}
+                    {{ isset($user) ? 'Editar ' . $extend['title_form'] : 'Nuevo ' . $extend['title_form'] }}
                 </span>
             </div>
-            <span class="ml-1 px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider"
-                style="{{ isset($user)
-                    ? 'background: rgba(245,158,11,0.1); color: rgb(217,119,6); border: 1px solid rgba(245,158,11,0.2);'
-                    : 'background: rgba(160,185,0,0.1); color: rgb(120,140,0); border: 1px solid rgba(160,185,0,0.2);' }}">
-                {{ isset($user) ? 'Editando' : 'Nuevo' }}
-            </span>
         </div>
-
+    </div>
+@endsection
+@section('content')
+    <div class="px-2 md:px-7 py-0">
         {{-- ALERT CONTAINER --}}
-        <div id="alertContainer" class="fixed top-16 right-1 md:right-5 z-[100] w-full max-w-sm pointer-events-none"></div>
+        <div id="alertContainer" class="fixed top-20 right-1 md:right-5 z-[100] w-full max-w-sm pointer-events-none"></div>
 
         {{-- CONTENIDO --}}
         <div class="px-6 lg:px-10 py-8 max-w-3xl mx-auto">
@@ -57,7 +45,7 @@
                                 </label>
                                 <div class="flex gap-2">
                                     <select id="codprofile" name="codprofile"
-                                        class="tom-select flex-1 min-w-0 h-10 text-sm text-slate-700 rounded-md outline-none transition-all duration-200 appearance-none"
+                                        class="tom-select flex-1 min-w-0 h-10 px-0 text-sm text-black rounded-md outline-none transition-all duration-200 appearance-none"
                                         style="background: #f8fafc; border: 1px solid #e2e8f0;"
                                         onfocus="this.style.background='white'; this.style.borderColor='rgba(0,176,202,0.5)'; this.style.boxShadow='0 0 0 3px rgba(0,176,202,0.08)';"
                                         onblur="this.style.background='#f8fafc'; this.style.borderColor='#e2e8f0'; this.style.boxShadow='none';">
@@ -89,7 +77,7 @@
                                 </label>
                                 <div class="flex gap-2">
                                     <select id="codperson" name="codperson"
-                                        class="tom-select flex-1 min-w-0 h-10 text-sm text-slate-700 rounded-md outline-none transition-all duration-200 appearance-none"
+                                        class="tom-select flex-1 min-w-0 h-10 px-0 text-sm text-black rounded-md outline-none transition-all duration-200 appearance-none"
                                         style="background: #f8fafc; border: 1px solid #e2e8f0;"
                                         onfocus="this.style.background='white'; this.style.borderColor='rgba(0,176,202,0.5)'; this.style.boxShadow='0 0 0 3px rgba(0,176,202,0.08)';"
                                         onblur="this.style.background='#f8fafc'; this.style.borderColor='#e2e8f0'; this.style.boxShadow='none';">
@@ -97,7 +85,8 @@
                                         @foreach ($persons as $person)
                                             <option value="{{ $person->codperson }}"
                                                 {{ isset($user) && $user->codperson == $person->codperson ? 'selected' : '' }}>
-                                                {{ $person->identify_number }} - {{ $person->firstname }} {{ $person->lastname_father }}
+                                                {{ $person->identify_number }} - {{ $person->firstname }}
+                                                {{ $person->lastname_father }}
                                                 {{ $person->lastname_mom }}
                                             </option>
                                         @endforeach
@@ -132,7 +121,7 @@
                                     </label>
                                     <input id="username" name="username" value="{{ $user->username ?? '' }}"
                                         placeholder="Ingrese el usuario"
-                                        class="w-full h-10 px-3.5 text-sm text-slate-700 rounded-md outline-none transition-all duration-200 placeholder:text-slate-300"
+                                        class="flex h-10 w-full rounded-md bg-input px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border disabled:cursor-not-allowed disabled:opacity-50"
                                         style="background: #f8fafc; border: 1px solid #e2e8f0;"
                                         onfocus="this.style.background='white'; this.style.borderColor='rgba(0,176,202,0.5)'; this.style.boxShadow='0 0 0 3px rgba(0,176,202,0.08)';"
                                         onblur="this.style.background='#f8fafc'; this.style.borderColor='#e2e8f0'; this.style.boxShadow='none';">

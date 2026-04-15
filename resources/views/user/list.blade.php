@@ -8,7 +8,7 @@
         <div class="px-6 lg:px-10 py-6">
 
             {{-- ALERT CONTAINER --}}
-            <div id="alertContainer" class="fixed top-16 right-1 md:right-5 z-[100] w-full max-w-sm pointer-events-none">
+            <div id="alertContainer" class="fixed top-20 right-1 md:right-5 z-[100] w-full max-w-sm pointer-events-none">
             </div>
 
             {{-- TÍTULO + ACCIONES --}}
@@ -19,7 +19,7 @@
                         <h1 class="text-xl font-bold text-slate-800 leading-none">
                             {{ $extend['title'] }}
                         </h1>
-                        <p class="text-xs text-gray-500 mt-0.5 font-normal">
+                        <p class="text-sm text-gray-500 mt-0.5 font-normal">
                             Gestiona los registros de {{ strtolower($extend['title']) }}.
                         </p>
                     </div>
