@@ -147,7 +147,8 @@
                                                 class="absolute right-3 top-1/2 -translate-y-1/2 transition-colors"
                                                 style="color: #94a3b8;" onmouseover="this.style.color='rgb(0,140,165)';"
                                                 onmouseout="this.style.color='#94a3b8';">
-                                                <span class="material-symbols-outlined text-[18px]">visibility</span>
+                                                <span
+                                                    class="material-symbols-outlined text-md md:text-[18px]">visibility</span>
                                             </button>
                                         </div>
                                         <span class="error-message hidden text-[11px] font-medium text-red-500"
@@ -171,7 +172,8 @@
                                                 class="absolute right-3 top-1/2 -translate-y-1/2 transition-colors"
                                                 style="color: #94a3b8;" onmouseover="this.style.color='rgb(0,140,165)';"
                                                 onmouseout="this.style.color='#94a3b8';">
-                                                <span class="material-symbols-outlined text-[18px]">visibility</span>
+                                                <span
+                                                    class="material-symbols-outlined text-md md:text-[18px]">visibility</span>
                                             </button>
                                         </div>
                                         <span class="error-message hidden text-[11px] font-medium text-red-500"
@@ -224,6 +226,40 @@
                 input.type = show ? 'text' : 'password';
                 icon.textContent = show ? 'visibility_off' : 'visibility';
             });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const personDNI = {
+                @foreach ($persons as $person)
+                    "{{ $person->codperson }}": "{{ $person->identify_number }}",
+                @endforeach
+            };
+
+            function applyDNI(value) {
+                const dni = personDNI[value] ?? '';
+                if (!dni) return;
+
+                const usernameEl = document.getElementById('username');
+                if (usernameEl && !usernameEl.value) {
+                    usernameEl.value = dni;
+                }
+
+                const passwordEl = document.getElementById('password');
+                const passwordConfEl = document.getElementById('password_confirmation');
+                if (passwordEl) passwordEl.value = dni;
+                if (passwordConfEl) passwordConfEl.value = dni;
+            }
+
+            const codpersonEl = document.getElementById('codperson');
+
+            // ✅ TomSelect SÍ dispara 'change' en el select nativo
+            // Solo necesitamos asegurarnos que esto corra DESPUÉS de que TomSelect inicie
+            codpersonEl.addEventListener('change', function() {
+                applyDNI(this.value);
+            });
+
         });
     </script>
 @endsection
