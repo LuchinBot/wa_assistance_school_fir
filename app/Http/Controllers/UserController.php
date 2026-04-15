@@ -202,7 +202,8 @@ class UserController extends Controller
                 );
 
                 $dni = $person->identify_number ?? 'N/A';
-                $owner = Auth::user()->person ? Auth::user()->person->firstname : 'Admin';
+                //$owner = Auth::user()->person ? Auth::user()->person->firstname : 'Admin';
+                $owner = 'I.E FIR';
 
                 $msg_wsp = [
                     'phone' => $phone,
@@ -213,7 +214,7 @@ class UserController extends Controller
                         "👤 Usuario: {$user->username}\n" .
                         "🔑 Contraseña: {$request->password}\n\n" .
                         "Por favor, cambia tu contraseña al ingresar.\n\n" .
-                        "_*By: {$owner}*_"
+                        "_*Atte: {$owner}*_"
                 ];
 
                 $response = Http::post(env('WHATSAPP_API_URL') . '/queue', [
