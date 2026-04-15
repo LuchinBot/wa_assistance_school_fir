@@ -117,19 +117,32 @@ class UserController extends Controller
     ============================================= */
     public function store(Request $request, $id = null)
     {
+
         $rules = [
-            'codprofile' => ['required', 'exists:profile,codprofile'],
-            'codperson'  => ['required', 'exists:person,codperson'],
+
+            'codprofile' => [
+                'required',
+                'exists:profile,codprofile'
+            ],
+
+            'codperson' => [
+                'required',
+                'exists:person,codperson',
+                Rule::unique('user', 'codperson')
+                    ->whereNull('deleted_at')
+                    ->ignore($id, 'coduser'),
+            ],
+
             'username' => [
                 'required',
                 'string',
                 'min:8',
                 'max:20',
                 'regex:/^[a-zA-Z0-9_-]+$/',
+                Rule::unique('user', 'username')
+                    ->whereNull('deleted_at')
+                    ->ignore($id, 'coduser'),
             ],
-            'password'   => $id
-                ? ['nullable', 'confirmed', 'min:8']
-                : ['required', 'confirmed', 'min:8'],
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -153,7 +166,10 @@ class UserController extends Controller
 
                 // 👉 Buscar incluso eliminados
                 $userDeleted = User::withTrashed()
-                    ->where('username', $request->username)
+                    ->where(function ($q) use ($request) {
+                        $q->where('username', $request->username)
+                            ->orWhere('codperson', $request->codperson);
+                    })
                     ->first();
 
                 if ($userDeleted && $userDeleted->trashed()) {
@@ -165,8 +181,21 @@ class UserController extends Controller
                     $message = 'Usuario restaurado correctamente';
                 } else {
                     // 👉 CREAR NUEVO
-                    $user = User::create($data);
-                    $message = 'Creado correctamente';
+
+                    try {
+                        $user = User::create($data);
+                        $message = 'Creado correctamente';
+                    } catch (\Illuminate\Database\QueryException $e) {
+
+                        if ($e->getCode() == '23505') {
+                            return response()->json([
+                                'success' => false,
+                                'message' => 'El usuario ya existe'
+                            ], 409);
+                        }
+
+                        throw $e;
+                    }
                 }
             } else {
                 // 👉 UPDATE NORMAL
@@ -175,57 +204,58 @@ class UserController extends Controller
                 $message = 'Actualizado correctamente';
             }
 
-            // 🚀 Enviar WhatsApp SOLO cuando es nuevo o restaurado
+            // Enviar WhatsApp SOLO cuando es nuevo o restaurado
             if (!$id) {
 
                 $person = $user->person;
 
-                if (!$person) {
-                    return response()->json([
-                        'message' => 'Usuario sin persona asociada'
-                    ]);
-                }
+                if ($person && $person->phone) {
 
-                $phone = preg_replace('/\D/', '', $person->phone);
-                $phone = preg_replace('/^(51|0051|\+51)/', '', $phone);
+                    $phone = preg_replace('/\D/', '', $person->phone);
+                    $phone = preg_replace('/^(51|0051|\+51)/', '', $phone);
 
-                if (strlen($phone) !== 9) {
-                    return response()->json([
-                        'message' => 'Teléfono inválido'
-                    ]);
-                }
+                    // Solo si teléfono válido
+                    if (strlen($phone) === 9) {
 
-                $name = trim(
-                    $person->firstname . ' ' .
-                        $person->lastname_father . ' ' .
-                        $person->lastname_mom
-                );
+                        $name = trim(
+                            $person->firstname . ' ' .
+                                $person->lastname_father . ' ' .
+                                $person->lastname_mom
+                        );
 
-                $dni = $person->identify_number ?? 'N/A';
-                //$owner = Auth::user()->person ? Auth::user()->person->firstname : 'Admin';
-                $owner = 'I.E FIR';
+                        $dni = $person->identify_number ?? 'N/A';
+                        $owner = 'I.E FIR';
 
-                $msg_wsp = [
-                    'phone' => $phone,
-                    'message' =>
-                    "👋 Hola *{$name}*\n\n" .
-                        "Te damos la bienvenida al *Sistema de Control de Asistencia - CTI*.\n\n" .
-                        "🌐 Web: iefir.ctiunsm.com\n" .
-                        "👤 Usuario: {$user->username}\n" .
-                        "🔑 Contraseña: {$request->password}\n\n" .
-                        "Por favor, cambia tu contraseña al ingresar.\n\n" .
-                        "_*Atte: {$owner}*_"
-                ];
+                        $msg_wsp = [
+                            'phone' => $phone,
+                            'message' =>
+                            "👋 Hola *{$name}*\n\n" .
+                                "Te damos la bienvenida al *Sistema de Control de Asistencia - CTI*.\n\n" .
+                                "🌐 Web: iefir.ctiunsm.com\n" .
+                                "👤 Usuario: {$user->username}\n" .
+                                "🔑 Contraseña: {$request->password}\n\n" .
+                                "Por favor, cambia tu contraseña al ingresar.\n\n" .
+                                "_*Atte: {$owner}*_"
+                        ];
+                        try {
 
-                $response = Http::post(env('WHATSAPP_API_URL') . '/queue', [
-                    'messages' => [$msg_wsp]
-                ]);
+                            $response = Http::post(
+                                env('WHATSAPP_API_URL') . '/queue',
+                                ['messages' => [$msg_wsp]]
+                            );
 
-                if (!$response->successful()) {
-                    return response()->json([
-                        'message' => 'Error enviando WhatsApp',
-                        'error' => $response->body()
-                    ], 500);
+                            if (!$response->successful()) {
+                                Log::error('Error enviando WhatsApp', [
+                                    'response' => $response->body()
+                                ]);
+                            }
+                        } catch (\Exception $e) {
+
+                            Log::error('Exception enviando WhatsApp', [
+                                'error' => $e->getMessage()
+                            ]);
+                        }
+                    }
                 }
             }
 
@@ -236,7 +266,6 @@ class UserController extends Controller
             ]);
         });
     }
-
     /* =============================================
        DESTROY
     ============================================= */
