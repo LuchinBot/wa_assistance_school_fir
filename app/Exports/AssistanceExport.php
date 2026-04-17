@@ -210,7 +210,7 @@ trait InstitutionHeader
         if (file_exists($logoSchool)) {
             $d1 = new Drawing();
             $d1->setName('Logo Colegio');
-            $d1->setDescription('I.E. Santa Rosa');
+            $d1->setDescription('I.E. Francisco Izquierdo Ríos');
             $d1->setPath($logoSchool);
             $d1->setHeight(60);
             $d1->setCoordinates('A2');

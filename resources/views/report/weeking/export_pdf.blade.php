@@ -543,7 +543,7 @@
     <div class="page-footer">
         <div class="footer-inner">
             <div class="footer-left">
-                <span class="footer-accent">I.E. Santa Rosa</span>
+                <span class="footer-accent">I.E. Francisco Izquierdo Ríos</span>
                 · Reporte Semanal de Asistencia
                 @if ($scheduleInfo)
                     · {{ $scheduleInfo->turn }}

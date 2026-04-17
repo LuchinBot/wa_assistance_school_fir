@@ -96,7 +96,7 @@ trait StudentInstitutionHeader
         $logoSchool = public_path('img/logo_school.png');
         if (file_exists($logoSchool)) {
             $d1 = new Drawing();
-            $d1->setName('Logo Colegio')->setDescription('I.E. Santa Rosa')
+            $d1->setName('Logo Colegio')->setDescription('I.E. Francisco Izquierdo Ríos')
                 ->setPath($logoSchool)->setHeight(60)
                 ->setCoordinates('A2')->setOffsetX(10)->setOffsetY(6)
                 ->setWorksheet($sheet);

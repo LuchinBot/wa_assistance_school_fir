@@ -840,7 +840,7 @@ table.g-tbl { width: 100%; border-collapse: collapse; }
         <div class="s1-wrap">
             <div class="s1-chip u-fade-up">
                 <span class="material-symbols-outlined">school</span>
-                I.E. Santa Rosa · Asistencias
+                I.E. Francisco Izquierdo Ríos · Asistencias
             </div>
 
             <h1 class="s1-title u-fade-up u-d1">

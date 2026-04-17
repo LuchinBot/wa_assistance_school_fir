@@ -363,7 +363,7 @@
     <div class="page-footer">
         <div class="footer-inner">
             <div class="footer-left">
-                <span class="footer-accent">I.E. Santa Rosa</span> · Assistance Control System
+                <span class="footer-accent">I.E. Francisco Izquierdo Ríos</span> · Assistance Control System
 
                 · Assistance School
             </div>
@@ -380,12 +380,12 @@
             {{-- Logo colegio izquierda --}}
             <div class="header-logo-school">
                 @if ($logoSchoolBase64)
-                    <img src="{{ $logoSchoolBase64 }}" alt="I.E. Santa Rosa">
+                    <img src="{{ $logoSchoolBase64 }}" alt="I.E. Francisco Izquierdo Ríos">
                 @else
                     <div
                         style="width:52px;height:52px;border-radius:6px;background:rgba(0,176,202,0.1);display:flex;align-items:center;justify-content:center;">
                         <span
-                            style="font-size:8px;color:rgb(0,176,202);text-align:center;line-height:1.2;">I.E.<br>Santa<br>Rosa</span>
+                            style="font-size:8px;color:rgb(0,176,202);text-align:center;line-height:1.2;">I.E.<br>Francisco<br>Izquierdo<br>Ríos</span>
                     </div>
                 @endif
             </div>

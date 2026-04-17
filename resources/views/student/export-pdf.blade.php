@@ -305,7 +305,7 @@
     <div class="page-footer">
         <div class="footer-inner">
             <div class="footer-left">
-                <span class="footer-accent">I.E. Santa Rosa</span> · Assistance Control System
+                <span class="footer-accent">I.E. Francisco Izquierdo Ríos</span> · Assistance Control System
 
                 · Assistance School
             </div>
@@ -320,7 +320,7 @@
         <div class="header-inner">
             <div class="header-logo-school">
                 @if ($logoSchoolBase64)
-                    <img src="{{ $logoSchoolBase64 }}" alt="I.E. Santa Rosa">
+                    <img src="{{ $logoSchoolBase64 }}" alt="I.E. Francisco Izquierdo Ríos">
                 @endif
             </div>
             <div class="header-divider">&nbsp;</div>
