@@ -89,7 +89,7 @@ class JustificationController extends Controller
             ])->findOrFail($id)
             : null;
 
-        $assistance_sessions = AssistanceSession::get();
+        $assistance_sessions = AssistanceSession::orderByDesc('date')->get();
         $enrollments = Enrollment::with('student.person')->get();
 
         $this->extend['view'] = 'form';

@@ -37,9 +37,8 @@
                     <div class="p-6">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
 
-                            {{-- Enrollment --}}
                             <div class="space-y-1.5">
-                                <label class="text-xs text-slate-500">
+                                <label class="text-sm font-medium text-slate-500">
                                     Estudiante <span class="text-red-400">*</span>
                                 </label>
 
@@ -52,6 +51,7 @@
                                     @foreach ($enrollments as $en)
                                         <option value="{{ $en->codenrollment }}"
                                             {{ isset($justification) && $justification->codenrollment == $en->codenrollment ? 'selected' : '' }}>
+                                            {{ $en->student->person->identify_number ?? '' }} -
                                             {{ $en->student->person->firstname ?? '' }}
                                             {{ $en->student->person->lastname_father ?? '' }}
                                             {{ $en->student->person->lastname_mom ?? '' }}
@@ -64,7 +64,7 @@
 
                             {{-- Tipo --}}
                             <div class="space-y-1.5">
-                                <label class="text-xs text-slate-500">
+                                <label class="text-sm font-medium text-slate-500">
                                     Tipo <span class="text-red-400">*</span>
                                 </label>
 
@@ -76,11 +76,11 @@
                                     <option value="">Seleccione...</option>
                                     <option value="JT"
                                         {{ isset($justification) && $justification->type == 'JT' ? 'selected' : '' }}>
-                                        Temporal
+                                        Temporal (Solo por hoy)
                                     </option>
                                     <option value="JI"
                                         {{ isset($justification) && $justification->type == 'JI' ? 'selected' : '' }}>
-                                        Indefinida
+                                        Indefinida (Sin retorno)
                                     </option>
                                 </select>
                                 <span class="error-message hidden text-[11px] font-medium text-red-500"
@@ -89,8 +89,8 @@
 
                             {{-- Sesión --}}
                             <div class="space-y-1.5 md:col-span-2">
-                                <label class="text-xs text-slate-500">
-                                    Sesión de Asistencia (solo para Justificación Temporal)
+                                <label class="text-sm font-medium text-slate-500">
+                                   Toma de asistencia (solo temporal)
                                 </label>
 
                                 <select name="codassistance_session" id="codassistance_session"
@@ -112,7 +112,7 @@
 
                             {{-- Motivo --}}
                             <div class="space-y-1.5 md:col-span-2">
-                                <label class="text-xs text-slate-500">
+                                <label class="text-sm font-medium text-slate-500">
                                     Motivo <span class="text-red-400">*</span>
                                 </label>
 

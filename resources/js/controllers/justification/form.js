@@ -7,8 +7,8 @@ const MOTIVOS = [
         texto: "El estudiante presenta un cuadro de enfermedad que le impide asistir con normalidad a clases, encontrándose actualmente en proceso de recuperación bajo supervisión médica.",
     },
     {
-        label: "Cita médica",
-        texto: "El estudiante tiene programada una cita o consulta médica en el horario de clases, lo cual hace necesaria su ausencia temporal en dicha sesión.",
+        label: "Transporte",
+        texto: "El estudiante enfrenta dificultades de transporte que le impiden asistir a clases en la fecha indicada.",
     },
     {
         label: "Emergencia familiar",
@@ -24,7 +24,7 @@ const MOTIVOS = [
     },
     {
         label: "Otro motivo",
-        texto: "",
+        texto: "El estudiante tiene un motivo excepcional que le impide asistir a clases.",
     },
 ];
 
@@ -38,7 +38,6 @@ function insertarSelectorMotivos() {
     // Crear selector de motivos rápidos
     const selectorWrapper = document.createElement("div");
     selectorWrapper.className = "flex flex-wrap gap-2 mb-2";
-    selectorWrapper.innerHTML = `<span class="text-[11px] text-slate-400 w-full">Motivos rápidos:</span>`;
 
     MOTIVOS.forEach((motivo) => {
         const btn = document.createElement("button");
@@ -46,7 +45,7 @@ function insertarSelectorMotivos() {
         btn.textContent = motivo.label;
         btn.dataset.texto = motivo.texto;
         btn.className =
-            "motivo-btn px-2.5 py-1 text-[11px] font-medium rounded-md border transition-all duration-150 active:scale-95 cursor-pointer";
+            "motivo-btn px-2.5 py-1 text-xs font-medium rounded-md border transition-all duration-150 active:scale-95 cursor-pointer";
         btn.style.cssText =
             "background: #f1f5f9; border-color: #e2e8f0; color: #64748b;";
 
