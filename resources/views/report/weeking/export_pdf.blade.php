@@ -33,7 +33,7 @@
         }
 
         @page {
-            size: A4 portrait;
+            size: A4 landscape;
             margin: 0;
         }
 
@@ -356,6 +356,7 @@
             font-family: 'MonaSansBold', sans-serif;
             color: #000000;
             font-size: 9px;
+            text-transform: uppercase;
         }
 
         .dni-col {
@@ -531,6 +532,7 @@
             font-size: 9px;
             color: #475569;
             padding-right: 14px;
+            font-family: 'MonaSansBold', sans-serif;
         }
 
         .gf-cell b {
@@ -645,12 +647,12 @@
                 <div class="meta-value">{{ $totalDays }} día{{ $totalDays !== 1 ? 's' : '' }}</div>
             </div>
 
-            <div class="meta-cell-right">
+            {{-- <div class="meta-cell-right">
                 <div class="meta-badge">
                     <div class="meta-badge-num">{{ $students->count() }}</div>
                     <div class="meta-badge-label">Estudiantes</div>
                 </div>
-            </div>
+            </div> --}}
 
         </div>
     </div>

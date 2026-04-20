@@ -452,10 +452,10 @@ class WeekingReportController extends Controller
                 'dateFrom' => $dateFrom->format('Y-m-d'),
                 'dateTo'   => $dateTo->format('Y-m-d'),
             ]
-        ))->setPaper('a4', 'portrait');
+        ))->setPaper('a4', 'landscape');
 
         // ── Nombre del archivo ──
-        $parts = ['REPORTE_SEMANAL'];
+        $parts = ['REPORTE_FECHAS'];
         if ($periodInfo)  $parts[] = str($periodInfo->name)->slug('_')->upper();
         if ($gradeInfo)   $parts[] = str($gradeInfo->name_large)->slug('_')->upper();
         if ($sectionInfo) $parts[] = 'SEC_' . strtoupper($sectionInfo->section);
