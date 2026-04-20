@@ -21,7 +21,7 @@ class WeekingReportController extends Controller
     protected $perPage = 15;
 
     /** Máximo de días hábiles permitidos por rango */
-    private const MAX_WORKING_DAYS = 5;
+    private const MAX_WORKING_DAYS = 31;
 
     public function __construct()
     {
@@ -60,30 +60,23 @@ class WeekingReportController extends Controller
      */
     private function clampDateRange(?string $from, ?string $to): array
     {
-        // Si no vienen, usar semana actual
-        $dateFrom = $from ? Carbon::parse($from)->startOfDay() : Carbon::now()->startOfWeek(Carbon::MONDAY);
-        $dateTo   = $to   ? Carbon::parse($to)->startOfDay()   : Carbon::now()->startOfWeek(Carbon::MONDAY)->addDays(4);
+        $dateFrom = $from ? Carbon::parse($from)->startOfDay()
+            : Carbon::now()->startOfWeek(Carbon::MONDAY);
+        $dateTo   = $to   ? Carbon::parse($to)->startOfDay()
+            : Carbon::now()->endOfDay();
 
-        // Asegurar lun–vie: si cae en fin de semana, mover al lunes siguiente / viernes anterior
         if ($dateFrom->isWeekend()) {
             $dateFrom = $dateFrom->next(Carbon::MONDAY);
         }
         if ($dateTo->isWeekend()) {
-            // viernes anterior
-            $dateTo = $dateTo->copy()->previous(Carbon::FRIDAY);
+            $dateTo = $dateTo->previous(Carbon::FRIDAY);
         }
 
-        // dateTo >= dateFrom
         if ($dateTo->lt($dateFrom)) {
             $dateTo = $dateFrom->copy();
         }
 
-        // dateTo no puede superar el viernes de la semana de dateFrom
-        $fridayOfFromWeek = $this->weekFriday($dateFrom);
-        if ($dateTo->gt($fridayOfFromWeek)) {
-            $dateTo = $fridayOfFromWeek;
-        }
-
+        // Ya no limitamos a una sola semana
         return [$dateFrom, $dateTo];
     }
 

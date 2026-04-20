@@ -249,7 +249,7 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            /* background: rgb(0, 0, 0); */
+            background: rgb(221, 217, 217);
             color: #000000;
             border-left: 2px solid black;
             padding: 2px 8px;
@@ -742,7 +742,7 @@
                         <div class="group-header-inner">
                             <div class="group-center">
                                 <span class="group-tag">
-                                    {{ $gradeName }} ·({{ $sectionName }})
+                                    {{ $gradeName }} · ({{ $sectionName }})
                                 </span>
 
                                 @if ($levelName)
