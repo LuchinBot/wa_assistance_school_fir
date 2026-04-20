@@ -26,8 +26,8 @@ class WeekingReportController extends Controller
     public function __construct()
     {
         $this->extend = [
-            'title'       => 'Reporte Semanal',
-            'title_form'  => 'reporte semanal',
+            'title'      => 'Asistencias (Rango de Fechas)',
+            'title_form' => 'asistencias (rango de fechas)',
             'view'        => 'list',
             'controller'  => 'weekingreport',
             'totalRecord' => 0,
