@@ -1,5 +1,5 @@
 import TableEngine from "../../modules/table/TableEngine";
-
+import { showError } from "../../core/alert";
 export default function () {
     // ── Filtros ──
     const dateFrom = document.getElementById("dateFrom");
@@ -12,21 +12,154 @@ export default function () {
     const btnToggleFilters = document.getElementById("btn-toggle-filters");
     const filtersRow = document.getElementById("filters-row");
     const btnClearFilters = document.getElementById("btn-clear-filters");
-
-    // ── Tabs ──
-    const tabSummary = document.getElementById("tab-summary");
-    const tabDetail = document.getElementById("tab-detail");
-    const viewSummary = document.getElementById("view-summary");
-    const viewDetail = document.getElementById("view-detail");
+    const dateRangeMsg = document.getElementById("dateRangeMsg");
 
     if (!document.getElementById("tableBody")) return;
 
-    let currentTab = "summary";
     let tableSummary = null;
-    let tableDetail = null;
 
     /* =============================================
-       EXTRA PARAMS — compartido entre ambos engines
+       VALIDACIÓN DE RANGO — máx 5 días, lun–vie
+    ============================================= */
+
+    /**
+     * Ajusta una fecha al lunes de su semana (ISO: lunes = día 1).
+     */
+    function toMonday(date) {
+        const d = new Date(date);
+        const day = d.getDay(); // 0=dom … 6=sáb
+        const diff = day === 0 ? -6 : 1 - day;
+        d.setDate(d.getDate() + diff);
+        return d;
+    }
+
+    /**
+     * Devuelve el viernes de la misma semana que `date`.
+     */
+    function toFriday(date) {
+        const mon = toMonday(date);
+        const fri = new Date(mon);
+        fri.setDate(mon.getDate() + 4);
+        return fri;
+    }
+
+    /**
+     * Formatea un Date a "YYYY-MM-DD" (value de <input type="date">).
+     */
+    function toInputDate(date) {
+        const y = date.getFullYear();
+        const m = String(date.getMonth() + 1).padStart(2, "0");
+        const d = String(date.getDate()).padStart(2, "0");
+        return `${y}-${m}-${d}`;
+    }
+
+    /**
+     * Cuenta días hábiles (lun–vie) entre dos fechas inclusive.
+     */
+    function workingDaysBetween(from, to) {
+        let count = 0;
+        const cur = new Date(from);
+        while (cur <= to) {
+            const day = cur.getDay();
+            if (day >= 1 && day <= 5) count++;
+            cur.setDate(cur.getDate() + 1);
+        }
+        return count;
+    }
+
+    /**
+     * Valida y corrige el rango de fechas:
+     *  - Ambas fechas deben estar en la misma semana lun–vie.
+     *  - Si `dateTo` < `dateFrom`, lo iguala a `dateFrom`.
+     *  - Si el rango supera 5 días hábiles, ajusta `dateTo` al viernes.
+     * Devuelve true si el rango es válido (puede continuar la carga).
+     */
+
+    function validateDateRange(changedField) {
+        if (!dateFrom?.value || !dateTo?.value) return true;
+
+        const from = new Date(dateFrom.value + "T00:00:00");
+        let to = new Date(dateTo.value + "T00:00:00");
+
+        // dateTo no puede ser anterior a dateFrom
+        if (to < from) {
+            dateTo.value = dateFrom.value;
+            to = new Date(from);
+        }
+
+        // Ambas deben estar en la misma semana ISO (lun–vie)
+        const monFrom = toMonday(from);
+        const friFrom = toFriday(from);
+
+        // Si dateFrom cambió, forzar dateTo dentro de esa semana
+        if (changedField === "from") {
+            // dateFrom → lunes de esa semana
+            const clampedFrom = new Date(from);
+            if (from.getDay() === 0 || from.getDay() === 6) {
+                // fin de semana → mover al lunes siguiente
+                const nextMon = toMonday(
+                    new Date(from.setDate(from.getDate() + 1)),
+                );
+                dateFrom.value = toInputDate(nextMon);
+                dateTo.value = toInputDate(toFriday(nextMon));
+                showRangeMsg(
+                    "La fecha fue ajustada al inicio de la semana laboral.",
+                );
+                return true;
+            }
+            // dateTo debe estar en la misma semana
+            if (to > friFrom) {
+                dateTo.value = toInputDate(friFrom);
+                showRangeMsg(
+                    "El rango máximo es una semana (lunes a viernes).",
+                );
+            } else {
+                clearRangeMsg();
+            }
+            return true;
+        }
+
+        // Si dateTo cambió
+        if (changedField === "to") {
+            if (to.getDay() === 0 || to.getDay() === 6) {
+                // fin de semana → mover al viernes anterior
+                const d = new Date(to);
+                while (d.getDay() !== 5) d.setDate(d.getDate() - 1);
+                dateTo.value = toInputDate(d);
+                to = new Date(d);
+                showRangeMsg("La fecha fue ajustada al viernes de la semana.");
+            }
+            // Verificar que no supere la semana de dateFrom
+            if (to > friFrom) {
+                dateTo.value = toInputDate(friFrom);
+                showRangeMsg(
+                    "El rango máximo es una semana (lunes a viernes).",
+                );
+            } else if (workingDaysBetween(from, to) > 5) {
+                dateTo.value = toInputDate(friFrom);
+                showRangeMsg("El rango máximo es 5 días hábiles.");
+            } else {
+                clearRangeMsg();
+            }
+        }
+
+        return true;
+    }
+
+    function showRangeMsg(msg) {
+        if (!dateRangeMsg) return;
+        dateRangeMsg.textContent = msg;
+        dateRangeMsg.classList.remove("hidden");
+    }
+
+    function clearRangeMsg() {
+        if (!dateRangeMsg) return;
+        dateRangeMsg.classList.add("hidden");
+        dateRangeMsg.textContent = "";
+    }
+
+    /* =============================================
+       EXTRA PARAMS
     ============================================= */
     function getExtraParams() {
         return {
@@ -48,7 +181,7 @@ export default function () {
             config: { recordsPerPage: 15 },
             extraParams: getExtraParams,
 
-            createRow(record, index) {
+            createRow(record) {
                 const person = record.student?.person ?? record.person;
                 const fullName = [person.lastname_father, person.lastname_mom]
                     .filter(Boolean)
@@ -68,7 +201,7 @@ export default function () {
                           : "rgb(239,68,68)";
 
                 return `
-                    <tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.1s;"
+                    <tr style="border-bottom:1px solid #f1f5f9;transition:background 0.1s;"
                         onmouseover="this.style.background='#f8fafc'"
                         onmouseout="this.style.background=''">
 
@@ -85,38 +218,38 @@ export default function () {
 
                         <td class="px-5 py-3 text-center">
                             <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-xs font-black"
-                                style="background: rgba(16,185,129,0.10); color: rgb(5,150,105);">
+                                style="background:rgba(16,185,129,0.10);color:rgb(5,150,105);">
                                 ${record.present ?? 0}
                             </span>
                         </td>
 
                         <td class="px-5 py-3 text-center">
                             <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-xs font-black"
-                                style="background: rgba(245,158,11,0.10); color: rgb(180,115,0);">
+                                style="background:rgba(245,158,11,0.10);color:rgb(180,115,0);">
                                 ${record.late ?? 0}
                             </span>
                         </td>
 
                         <td class="px-5 py-3 text-center">
                             <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-xs font-black"
-                                style="background: rgba(234,179,8,0.15); color: rgb(161,136,0);">
+                                style="background:rgba(234,179,8,0.15);color:rgb(161,136,0);">
                                 ${record.justified ?? 0}
                             </span>
                         </td>
 
                         <td class="px-5 py-3 text-center">
                             <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-xs font-black"
-                                style="background: rgba(239,68,68,0.10); color: rgb(220,50,50);">
+                                style="background:rgba(239,68,68,0.10);color:rgb(220,50,50);">
                                 ${record.absent ?? 0}
                             </span>
                         </td>
 
                         <td class="px-5 py-3 text-center">
                             <div class="flex flex-col items-center gap-1">
-                                <span class="text-xs font-black" style="color: ${barColor};">${pct}%</span>
-                                <div class="w-14 h-1.5 rounded-full" style="background: #e8edf2;">
+                                <span class="text-xs font-black" style="color:${barColor};">${pct}%</span>
+                                <div class="w-14 h-1.5 rounded-full" style="background:#e8edf2;">
                                     <div class="h-full rounded-full transition-all"
-                                        style="width: ${pct}%; background: ${barColor};"></div>
+                                        style="width:${pct}%;background:${barColor};"></div>
                                 </div>
                             </div>
                         </td>
@@ -179,10 +312,10 @@ export default function () {
                                 <p class="text-xs text-slate-500 mt-0.5">${gradeLabel}</p>
                             </div>
                             <div class="flex flex-col items-end gap-1">
-                                <span class="text-sm font-black" style="color: ${barColor};">${pct}%</span>
-                                <div class="w-16 h-1.5 rounded-full" style="background: #e8edf2;">
+                                <span class="text-sm font-black" style="color:${barColor};">${pct}%</span>
+                                <div class="w-16 h-1.5 rounded-full" style="background:#e8edf2;">
                                     <div class="h-full rounded-full"
-                                        style="width: ${pct}%; background: ${barColor};"></div>
+                                        style="width:${pct}%;background:${barColor};"></div>
                                 </div>
                             </div>
                         </div>
@@ -191,9 +324,9 @@ export default function () {
                             ${stats
                                 .map(
                                     (s) => `
-                                <div class="flex flex-col items-center py-2 rounded-lg" style="background: ${s.bg};">
-                                    <span class="text-base font-black" style="color: ${s.color};">${s.val}</span>
-                                    <span class="text-[10px] font-semibold mt-0.5" style="color: ${s.color};">${s.label}</span>
+                                <div class="flex flex-col items-center py-2 rounded-lg" style="background:${s.bg};">
+                                    <span class="text-base font-black" style="color:${s.color};">${s.val}</span>
+                                    <span class="text-[10px] font-semibold mt-0.5" style="color:${s.color};">${s.label}</span>
                                 </div>
                             `,
                                 )
@@ -206,149 +339,12 @@ export default function () {
     }
 
     /* =============================================
-       FACTORY — DETALLE
-    ============================================= */
-    function createDetailEngine() {
-        return new TableEngine({
-            baseUrl: () => "/report/weeking",
-            config: { recordsPerPage: 15 },
-            extraParams: getExtraParams,
-
-            createRow(record) {
-                const person = record.enrollment?.student?.person;
-                if (!person) return "";
-
-                const fullName = [person.lastname_father, person.lastname_mom]
-                    .filter(Boolean)
-                    .join(" ");
-
-                const grade = record.enrollment?.grade_schedule?.grade;
-                const gradeLabel = grade
-                    ? `${grade.name_large} <span class="text-slate-400">Sec. ${record.enrollment?.grade_schedule?.section ?? "—"}</span>`
-                    : "—";
-
-                const sessionDate = record.assistance_session?.date
-                    ? new Date(
-                          record.assistance_session.date,
-                      ).toLocaleDateString("es-PE", {
-                          day: "2-digit",
-                          month: "2-digit",
-                          year: "numeric",
-                      })
-                    : "—";
-
-                const statusMap = {
-                    present: {
-                        label: "Presente",
-                        cls: "bg-emerald-100 text-emerald-700",
-                    },
-                    late: {
-                        label: "Tardanza",
-                        cls: "bg-amber-100 text-amber-700",
-                    },
-                    absent: {
-                        label: "Ausente",
-                        cls: "bg-red-100 text-red-700",
-                    },
-                    justified: {
-                        label: "Justificado",
-                        cls: "bg-yellow-100 text-yellow-700",
-                    },
-                };
-                const status = statusMap[record.status] ?? statusMap.absent;
-
-                return `
-                    <tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.1s;"
-                        onmouseover="this.style.background='#f8fafc'"
-                        onmouseout="this.style.background=''">
-                        <td class="px-5 py-3 text-xs">${record.time_entry ?? "—"}</td>
-                        <td class="px-5 py-3 text-xs">${person.identify_number ?? "—"}</td>
-                        <td class="px-5 py-3 text-xs font-medium text-slate-700">
-                            ${person.firstname ?? "—"} ${fullName}
-                        </td>
-                        <td class="px-5 py-3 text-xs">${gradeLabel}</td>
-                        <td class="px-5 py-3 text-xs">${sessionDate}</td>
-                        <td class="px-5 py-3 text-center">
-                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${status.cls}">
-                                ${status.label}
-                            </span>
-                        </td>
-                    </tr>
-                `;
-            },
-
-            createCard(record) {
-                const person = record.enrollment?.student?.person;
-                if (!person) return "";
-                const fullName = [person.lastname_father, person.lastname_mom]
-                    .filter(Boolean)
-                    .join(" ");
-                const sessionDate = record.assistance_session?.date
-                    ? new Date(
-                          record.assistance_session.date,
-                      ).toLocaleDateString("es-PE", {
-                          day: "2-digit",
-                          month: "2-digit",
-                          year: "numeric",
-                      })
-                    : "—";
-                const statusMap = {
-                    present: {
-                        label: "Presente",
-                        bg: "rgba(16,185,129,0.10)",
-                        color: "rgb(5,150,105)",
-                    },
-                    late: {
-                        label: "Tardanza",
-                        bg: "rgba(245,158,11,0.10)",
-                        color: "rgb(180,115,0)",
-                    },
-                    justified: {
-                        label: "Justificado",
-                        bg: "rgba(234,179,8,0.15)",
-                        color: "rgb(161,136,0)",
-                    },
-                    absent: {
-                        label: "Ausente",
-                        bg: "rgba(239,68,68,0.10)",
-                        color: "rgb(220,50,50)",
-                    },
-                };
-                const status = statusMap[record.status] ?? statusMap.absent;
-
-                return `
-                    <div class="p-4 bg-white border-b border-slate-100">
-                        <div class="flex items-center justify-between gap-2">
-                            <div>
-                                <p class="text-sm font-semibold text-slate-800">
-                                    ${person.firstname ?? "—"} ${fullName}
-                                </p>
-                                <p class="text-xs text-slate-400 mt-0.5">
-                                    DNI: ${person.identify_number ?? "—"} · ${sessionDate}
-                                </p>
-                            </div>
-                            <span class="text-xs font-semibold px-2.5 py-1 rounded-full flex-shrink-0"
-                                style="background: ${status.bg}; color: ${status.color};">
-                                ${status.label}
-                            </span>
-                        </div>
-                        <p class="text-xs text-slate-400 mt-1">Hora: ${record.time_entry ?? "—"}</p>
-                    </div>
-                `;
-            },
-        });
-    }
-
-    /* =============================================
        HELPERS
     ============================================= */
     function reload() {
-        if (currentTab === "summary" && tableSummary) {
+        if (tableSummary) {
             tableSummary.state.currentPage = 1;
             tableSummary.loadRecords(0, 15);
-        } else if (currentTab === "detail" && tableDetail) {
-            tableDetail.state.currentPage = 1;
-            tableDetail.loadRecords(0, 15);
         }
     }
 
@@ -418,81 +414,41 @@ export default function () {
     }
 
     /* =============================================
-       TABS
-    ============================================= */
-    tabSummary?.addEventListener("click", () => {
-        if (currentTab === "summary") return;
-        currentTab = "summary";
-
-        tabSummary.style.background = "rgb(0,176,202)";
-        tabSummary.style.color = "white";
-        tabDetail.style.background = "white";
-        tabDetail.style.color = "#94a3b8";
-
-        viewSummary.classList.remove("hidden");
-        viewDetail.classList.add("hidden");
-
-        if (tableSummary) {
-            tableSummary.state.currentPage = 1;
-            tableSummary.loadRecords(0, 15);
-        }
-    });
-
-    tabDetail?.addEventListener("click", () => {
-        if (currentTab === "detail") return;
-        currentTab = "detail";
-
-        tabDetail.style.background = "rgb(0,176,202)";
-        tabDetail.style.color = "white";
-        tabSummary.style.background = "white";
-        tabSummary.style.color = "#94a3b8";
-
-        viewDetail.classList.remove("hidden");
-        viewSummary.classList.add("hidden");
-
-        // Instanciar solo la primera vez
-        if (!tableDetail) {
-            tableDetail = createDetailEngine();
-        } else {
-            tableDetail.state.currentPage = 1;
-            tableDetail.loadRecords(0, 15);
-        }
-    });
-
-    /* =============================================
-       FILTROS
+       FILTROS — EVENTOS
     ============================================= */
 
-    // Fechas con debounce
+    // Fechas con debounce + validación
     let dateDebounce = null;
-    [dateFrom, dateTo].forEach((el) => {
-        el?.addEventListener("change", () => {
-            clearTimeout(dateDebounce);
-            dateDebounce = setTimeout(reload, 300);
-        });
+
+    dateFrom?.addEventListener("change", () => {
+        //validateDateRange("from");
+        clearTimeout(dateDebounce);
+        dateDebounce = setTimeout(reload, 300);
     });
 
-    // Horario
+    dateTo?.addEventListener("change", () => {
+        //validateDateRange("to");
+        clearTimeout(dateDebounce);
+        dateDebounce = setTimeout(reload, 300);
+    });
+
     scheduleFilter?.addEventListener("change", () => {
         updateSectionsByGrade();
         reload();
         checkActiveFilters();
     });
 
-    // Grado
     gradeFilter?.addEventListener("change", () => {
         updateSectionsByGrade();
         reload();
         checkActiveFilters();
     });
 
-    // Sección
     sectionFilter?.addEventListener("change", () => {
         reload();
         checkActiveFilters();
     });
 
-    // Período
     periodFilter?.addEventListener("change", () => reload());
 
     // Toggle filtros mobile
@@ -518,11 +474,25 @@ export default function () {
         sectionFilterWrap.classList.remove("flex");
         btnClearFilters.classList.add("att-hidden");
         btnClearFilters.classList.remove("flex");
+        clearRangeMsg();
         reload();
     });
 
     // Exportar PDF
     document.getElementById("btn-export-pdf")?.addEventListener("click", () => {
+        const missing = [];
+
+        if (!periodFilter?.value) missing.push("Período");
+        if (!dateFrom?.value) missing.push("Fecha desde");
+        if (!dateTo?.value) missing.push("Fecha hasta");
+        if (!scheduleFilter?.value) missing.push("Horario");
+        if (!gradeFilter?.value) missing.push("Grado");
+
+        if (missing.length > 0) {
+            showError(`Debes seleccionar: ${missing.join(", ")}`);
+            return;
+        }
+
         window.location.href = buildExportUrl();
     });
 

@@ -18,7 +18,7 @@
                         {{ $extend['title'] }}
                     </h1>
                     <p class="text-xs text-gray-500 mt-0.5 font-normal">
-                        Consulta el resumen de asistencia semanal por estudiante (lunes a viernes).
+                        Consulta el resumen de asistencia por fechas de los estudiantes.
                     </p>
                 </div>
 

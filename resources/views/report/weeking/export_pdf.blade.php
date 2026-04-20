@@ -79,28 +79,29 @@
 
         .header-institution {
             font-family: 'MonaSansExtraBold', sans-serif;
-            font-size: 18px;
+            font-size: 22px;
             color: #0f172a;
+            line-height: 0.8;
             text-transform: uppercase;
-            line-height: 1;
-            /* 👈 más natural */
+            margin: 0;
         }
 
         .header-title {
             font-family: 'MonaSansBold', sans-serif;
-            font-size: 16px;
-            color: rgb(0, 176, 202);
+            font-size: 19px;
+            color: #0f172a;
+            line-height: 0.8;
             text-transform: uppercase;
-            line-height: 1;
+            margin: 0;
         }
 
         .header-subtitle {
-            font-family: 'MonaSans', sans-serif;
-            font-size: 10px;
-            color: #64748b;
+            font-family: 'MonaSansBold', sans-serif;
+            font-size: 9px;
+            color: rgb(0, 176, 202);
+            margin-top: 2px;
             letter-spacing: 0.04em;
             text-transform: uppercase;
-            line-height: 1;
         }
 
         .header-logo-sys {
@@ -204,7 +205,7 @@
             display: inline-flex;
             align-items: center;
             gap: 4px;
-            font-size: 7px;
+            font-size: 9px;
             color: #475569;
             white-space: nowrap;
         }
@@ -215,8 +216,8 @@
 
         .legend-dot {
             display: inline-block;
-            width: 7px;
-            height: 7px;
+            width: 9px;
+            height: 9px;
             border-radius: 2px;
             margin-right: 3px;
         }
@@ -248,10 +249,10 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            background: rgb(0, 176, 202);
-            color: #fff;
+            /* background: rgb(0, 0, 0); */
+            color: #000000;
+            border-left: 2px solid black;
             padding: 2px 8px;
-            border-radius: 4px;
             font-size: 9px;
             font-family: 'MonaSansBold', sans-serif;
         }
@@ -316,7 +317,7 @@
             font-family: 'MonaSansBold', sans-serif;
             padding: 5px 6px;
             text-align: left;
-            font-size: 6.5px;
+            font-size: 9px;
             text-transform: uppercase;
             letter-spacing: 0.06em;
             color: #fff;
@@ -336,7 +337,7 @@
 
         tbody td {
             padding: 4px 6px;
-            font-size: 7.5px;
+            font-size: 9px;
             color: #334155;
             vertical-align: middle;
         }
@@ -347,19 +348,20 @@
 
         .num-col {
             color: #94a3b8;
-            font-size: 7px;
+            font-size: 9px;
             text-align: center;
         }
 
         .name-col {
             font-family: 'MonaSansBold', sans-serif;
-            color: #0f172a;
-            font-size: 7.5px;
+            color: #000000;
+            font-size: 9px;
         }
 
         .dni-col {
-            font-size: 7px;
-            color: #64748b;
+            font-size: 9px;
+            font-family: 'MonaSansBold', sans-serif;
+            color: #000000;
         }
 
         /* ── BADGES DE DÍA ── */
@@ -371,7 +373,7 @@
             height: 16px;
             border-radius: 3px;
             font-family: 'MonaSansBold', sans-serif;
-            font-size: 6.5px;
+            font-size: 9px;
         }
 
         .badge-P {
@@ -504,7 +506,7 @@
 
         /* Cabecera de día en tabla */
         .day-head {
-            font-size: 6px;
+            font-size: 9px;
             white-space: nowrap;
             text-align: center;
         }
@@ -526,7 +528,7 @@
         .gf-cell {
             display: table-cell;
             vertical-align: middle;
-            font-size: 7px;
+            font-size: 9px;
             color: #475569;
             padding-right: 14px;
         }
@@ -543,7 +545,7 @@
     <div class="page-footer">
         <div class="footer-inner">
             <div class="footer-left">
-                <span class="footer-accent">I.E. Francisco Izquierdo Ríos</span>
+                <span class="footer-accent">{{ env('APP_IE') }}</span>
                 · Reporte Semanal de Asistencia
                 @if ($scheduleInfo)
                     · {{ $scheduleInfo->turn }}
@@ -572,7 +574,7 @@
             <div class="header-divider">&nbsp;</div>
 
             <div class="header-info">
-                <div class="header-institution">Institución Educativa Francisco Izquierdo Ríos</div>
+                <div class="header-institution">{{ env('APP_IE') }}</div>
                 <div class="header-title">Reporte Semanal de Asistencia</div>
                 <div class="header-subtitle">
                     Documento generado automáticamente · {{ now()->isoFormat('D [de] MMMM [de] YYYY') }}
@@ -680,9 +682,6 @@
                     <b style="color:rgb(220,50,50);">A</b> = Ausente
                 </span>
             </div>
-            <div class="legend-item" style="color:#94a3b8;font-size:6.5px;">
-                · Cada columna central = una sesión del rango seleccionado.
-            </div>
         </div>
     </div>
 
@@ -743,7 +742,7 @@
                         <div class="group-header-inner">
                             <div class="group-center">
                                 <span class="group-tag">
-                                    {{ $gradeName }} · Sec. {{ $sectionName }}
+                                    {{ $gradeName }} ·({{ $sectionName }})
                                 </span>
 
                                 @if ($levelName)
@@ -780,11 +779,11 @@
                                         </span>
                                     </th>
                                 @endforeach
-                                <th class="center" style="width:18px;color:rgb(5,150,105);">P</th>
+                                {{-- <th class="center" style="width:18px;color:rgb(5,150,105);">P</th>
                                 <th class="center" style="width:18px;color:rgb(245,158,11);">T</th>
                                 <th class="center" style="width:18px;color:rgb(161,136,0);">J</th>
-                                <th class="center" style="width:18px;color:rgb(220,50,50);">A</th>
-                                <th class="center" style="width:42px;">% Asist.</th>
+                                <th class="center" style="width:18px;color:rgb(220,50,50);">A</th> --}}
+                                <th class="center" style="width:42px;">%</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -822,10 +821,10 @@
                                         </td>
                                     @endforeach
 
-                                    <td class="center count-P">{{ $student['present'] }}</td>
+                                    {{-- <td class="center count-P">{{ $student['present'] }}</td>
                                     <td class="center count-T">{{ $student['late'] }}</td>
                                     <td class="center count-J">{{ $student['justified'] }}</td>
-                                    <td class="center count-A">{{ $student['absent'] }}</td>
+                                    <td class="center count-A">{{ $student['absent'] }}</td> --}}
 
                                     <td class="center">
                                         <div class="pct-wrap">

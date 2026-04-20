@@ -126,7 +126,7 @@
                     </p>
 
                     {{-- Exportar --}}
-                    <div class="flex items-center gap-1.5 flex-shrink-0">
+                    {{-- <div class="flex items-center gap-1.5 flex-shrink-0">
                         <button id="btn-export-excel"
                             class="flex items-center gap-1 h-8 px-2.5 rounded-lg text-xs font-semibold transition-all active:scale-95"
                             style="background: rgba(34,197,94,0.08); color: rgb(22,163,74); border: 1px solid rgba(34,197,94,0.2);"
@@ -143,7 +143,7 @@
                             <span class="material-symbols-outlined text-sm">picture_as_pdf</span>
                             <span class="hidden md:inline">PDF</span>
                         </button>
-                    </div>
+                    </div> --}}
 
                     {{-- Botón toggle filtros (mobile) --}}
                     <button id="btn-toggle-filters"
