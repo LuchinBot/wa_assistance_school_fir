@@ -410,8 +410,16 @@ class StudentController extends Controller
 
         // Subir al servidor de archivos
         $response = Http::timeout(30)
-            ->attach('file', file_get_contents($tempPath), $filename)
-            ->post(config('app.files_url') . '/api/upload', ['folder' => 'carnets']);
+            ->withoutVerifying()
+            ->attach(
+                'file',
+                fopen($tempPath, 'r'),
+                $filename
+            )
+            ->post(
+                config('app.files_url') . '/api/upload',
+                ['folder' => 'carnets']
+            );
 
         unlink($tempPath);
 
