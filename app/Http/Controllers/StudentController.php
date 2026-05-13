@@ -410,11 +410,10 @@ class StudentController extends Controller
 
         // Subir al servidor de archivos
         $response = Http::timeout(30)
-            ->retry(3, 2000) // 3 intentos, espera 2 segundos entre cada uno
             ->withoutVerifying()
             ->attach(
                 'file',
-                fopen($tempPath, 'r'),
+                file_get_contents($tempPath), // ← lee el contenido en memoria, no un resource
                 $filename
             )
             ->post(
