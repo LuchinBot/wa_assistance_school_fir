@@ -75,117 +75,121 @@
                 </div>
 
                 {{-- FILA 2: Filtros --}}
-                <div id="filters-row"
-                    class="px-4 py-2 flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-2">
+                {{-- FILA 2: Filtros --}}
+                <div id="filters-row" class="px-4 py-2">
 
-                    <span
-                        class="text-[10px] font-bold uppercase tracking-widest hidden sm:block flex-shrink-0 text-slate-500">
-                        Filtros:
-                    </span>
+                    <div class="flex flex-wrap items-center gap-2">
 
-                    {{-- Período --}}
-                    <div class="flex items-center gap-2 px-3 py-1.5 rounded-md w-full sm:w-auto sm:min-w-[160px]"
-                        style="background:#f4f6f8;border:1px solid #e2e8f0;">
-                        <span class="material-symbols-outlined text-[14px] flex-shrink-0"
-                            style="color:#94a3b8;">calendar_month</span>
-                        <select id="periodFilter"
-                            class="flex-1 min-w-0 text-xs text-slate-700 outline-none bg-transparent cursor-pointer">
-                            <option value="">Todos los períodos</option>
-                            @foreach ($periods as $period)
-                                <option value="{{ $period->codperiod }}" {{ $period->is_active == 'Y' ? 'selected' : '' }}>
-                                    {{ $period->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
+                        <span
+                            class="text-[10px] font-bold uppercase tracking-widest hidden sm:block flex-shrink-0 text-slate-500">
+                            Filtros:
+                        </span>
 
-                    {{-- Fechas: desde → hasta en la misma fila --}}
-                    <div class="flex items-center gap-2 w-full sm:w-auto">
-
-                        <div class="flex items-center gap-2 px-3 py-1.5 rounded-md flex-1 sm:flex-none"
-                            style="background:#f4f6f8;border:1px solid #e2e8f0;"
-                            onfocus-within="this.style.borderColor='rgba(0,176,202,0.5)';">
-                            <span class="material-symbols-outlined text-[14px] flex-shrink-0"
-                                style="color:#94a3b8;">date_range</span>
-                            <input type="date" id="dateFrom" value="{{ $defaultFrom }}"
-                                class="flex-1 min-w-0 text-xs text-slate-700 outline-none bg-transparent cursor-pointer"
-                                onfocus="this.parentElement.style.borderColor='rgba(0,176,202,0.5)';"
-                                onblur="this.parentElement.style.borderColor='#e2e8f0';">
-                        </div>
-
-                        <span class="text-xs text-slate-400 flex-shrink-0">→</span>
-
-                        <div class="flex items-center gap-2 px-3 py-1.5 rounded-md flex-1 sm:flex-none"
+                        {{-- Período --}}
+                        <div class="flex items-center gap-2 px-3 py-1.5 rounded-md w-full sm:w-auto sm:min-w-[160px]"
                             style="background:#f4f6f8;border:1px solid #e2e8f0;">
                             <span class="material-symbols-outlined text-[14px] flex-shrink-0"
-                                style="color:#94a3b8;">event</span>
-                            <input type="date" id="dateTo" value="{{ $defaultTo }}"
+                                style="color:#94a3b8;">calendar_month</span>
+                            <select id="periodFilter"
+                                class="flex-1 min-w-0 text-xs text-slate-700 outline-none bg-transparent cursor-pointer">
+                                <option value="">Todos los períodos</option>
+                                @foreach ($periods as $period)
+                                    <option value="{{ $period->codperiod }}"
+                                        {{ $period->is_active == 'Y' ? 'selected' : '' }}>
+                                        {{ $period->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        {{-- Fechas: desde → hasta en la misma fila --}}
+                        <div class="flex items-center gap-2 w-full sm:w-auto">
+
+                            <div class="flex items-center gap-2 px-3 py-1.5 rounded-md flex-1 sm:flex-none"
+                                style="background:#f4f6f8;border:1px solid #e2e8f0;"
+                                onfocus-within="this.style.borderColor='rgba(0,176,202,0.5)';">
+                                <span class="material-symbols-outlined text-[14px] flex-shrink-0"
+                                    style="color:#94a3b8;">date_range</span>
+                                <input type="date" id="dateFrom" value="{{ $defaultFrom }}"
+                                    class="flex-1 min-w-0 text-xs text-slate-700 outline-none bg-transparent cursor-pointer"
+                                    onfocus="this.parentElement.style.borderColor='rgba(0,176,202,0.5)';"
+                                    onblur="this.parentElement.style.borderColor='#e2e8f0';">
+                            </div>
+
+                            <span class="text-xs text-slate-400 flex-shrink-0">→</span>
+
+                            <div class="flex items-center gap-2 px-3 py-1.5 rounded-md flex-1 sm:flex-none"
+                                style="background:#f4f6f8;border:1px solid #e2e8f0;">
+                                <span class="material-symbols-outlined text-[14px] flex-shrink-0"
+                                    style="color:#94a3b8;">event</span>
+                                <input type="date" id="dateTo" value="{{ $defaultTo }}"
+                                    class="flex-1 min-w-0 text-xs text-slate-700 outline-none bg-transparent cursor-pointer"
+                                    onfocus="this.parentElement.style.borderColor='rgba(0,176,202,0.5)';"
+                                    onblur="this.parentElement.style.borderColor='#e2e8f0';">
+                            </div>
+
+                        </div>
+
+                        {{-- Horario --}}
+                        <div class="flex items-center gap-2 px-3 py-1.5 rounded-md w-full sm:w-auto sm:min-w-[175px]"
+                            style="background:#f4f6f8;border:1px solid #e2e8f0;">
+                            <span class="material-symbols-outlined text-[14px] flex-shrink-0"
+                                style="color:#94a3b8;">schedule</span>
+                            <select id="scheduleFilter"
                                 class="flex-1 min-w-0 text-xs text-slate-700 outline-none bg-transparent cursor-pointer"
                                 onfocus="this.parentElement.style.borderColor='rgba(0,176,202,0.5)';"
                                 onblur="this.parentElement.style.borderColor='#e2e8f0';">
+                                <option value="">Todos los horarios</option>
+                                @foreach ($schedules as $schedule)
+                                    <option value="{{ $schedule->codschedule }}">
+                                        {{ $schedule->turn }} · {{ $schedule->time_start }} – {{ $schedule->time_end }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
 
+                        {{-- Grado --}}
+                        <div class="flex items-center gap-2 px-3 py-1.5 rounded-md w-full sm:w-auto sm:min-w-[150px]"
+                            style="background:#f4f6f8;border:1px solid #e2e8f0;">
+                            <span class="material-symbols-outlined text-[14px] flex-shrink-0"
+                                style="color:#94a3b8;">school</span>
+                            <select id="gradeFilter"
+                                class="flex-1 min-w-0 text-xs text-slate-700 outline-none bg-transparent cursor-pointer"
+                                onfocus="this.parentElement.style.borderColor='rgba(0,176,202,0.5)';"
+                                onblur="this.parentElement.style.borderColor='#e2e8f0';">
+                                <option value="">Todos los grados</option>
+                                @foreach ($grades as $grade)
+                                    <option value="{{ $grade->codgrade }}">{{ $grade->name_large }}
+                                        | {{ $grade->level->name_large }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        {{-- Sección --}}
+                        <div id="sectionFilterWrap"
+                            class="att-hidden items-center gap-2 px-3 py-1.5 rounded-md w-full sm:w-auto sm:min-w-[120px]"
+                            style="background:#f4f6f8;border:1px solid #e2e8f0;">
+                            <span class="material-symbols-outlined text-[14px] flex-shrink-0"
+                                style="color:#94a3b8;">tab</span>
+                            <select id="sectionFilter"
+                                class="flex-1 min-w-0 text-xs text-slate-700 outline-none bg-transparent cursor-pointer"
+                                onfocus="this.parentElement.style.borderColor='rgba(0,176,202,0.5)';"
+                                onblur="this.parentElement.style.borderColor='#e2e8f0';">
+                                <option value="">Todas las secciones</option>
+                            </select>
+                        </div>
+
+                        {{-- Limpiar filtros --}}
+                        <button id="btn-clear-filters"
+                            class="att-hidden h-7 px-2.5 rounded-md text-[11px] font-semibold transition-all flex-shrink-0 flex items-center justify-center gap-1 w-full sm:w-auto"
+                            style="color:#94a3b8;border:1px solid #e2e8f0;"
+                            onmouseover="this.style.color='rgb(220,50,50)';this.style.borderColor='rgba(220,50,50,0.3)';"
+                            onmouseout="this.style.color='#94a3b8';this.style.borderColor='#e2e8f0';">
+                            <span class="material-symbols-outlined text-[13px]">filter_list_off</span>
+                            Limpiar
+                        </button>
+
                     </div>
-
-                    {{-- Horario --}}
-                    <div class="flex items-center gap-2 px-3 py-1.5 rounded-md w-full sm:w-auto sm:min-w-[175px]"
-                        style="background:#f4f6f8;border:1px solid #e2e8f0;">
-                        <span class="material-symbols-outlined text-[14px] flex-shrink-0"
-                            style="color:#94a3b8;">schedule</span>
-                        <select id="scheduleFilter"
-                            class="flex-1 min-w-0 text-xs text-slate-700 outline-none bg-transparent cursor-pointer"
-                            onfocus="this.parentElement.style.borderColor='rgba(0,176,202,0.5)';"
-                            onblur="this.parentElement.style.borderColor='#e2e8f0';">
-                            <option value="">Todos los horarios</option>
-                            @foreach ($schedules as $schedule)
-                                <option value="{{ $schedule->codschedule }}">
-                                    {{ $schedule->turn }} · {{ $schedule->time_start }} – {{ $schedule->time_end }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    {{-- Grado --}}
-                    <div class="flex items-center gap-2 px-3 py-1.5 rounded-md w-full sm:w-auto sm:min-w-[150px]"
-                        style="background:#f4f6f8;border:1px solid #e2e8f0;">
-                        <span class="material-symbols-outlined text-[14px] flex-shrink-0"
-                            style="color:#94a3b8;">school</span>
-                        <select id="gradeFilter"
-                            class="flex-1 min-w-0 text-xs text-slate-700 outline-none bg-transparent cursor-pointer"
-                            onfocus="this.parentElement.style.borderColor='rgba(0,176,202,0.5)';"
-                            onblur="this.parentElement.style.borderColor='#e2e8f0';">
-                            <option value="">Todos los grados</option>
-                            @foreach ($grades as $grade)
-                                <option value="{{ $grade->codgrade }}">{{ $grade->name_large }}
-                                    | {{ $grade->level->name_large }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    {{-- Sección --}}
-                    <div id="sectionFilterWrap"
-                        class="att-hidden items-center gap-2 px-3 py-1.5 rounded-md w-full sm:w-auto sm:min-w-[120px]"
-                        style="background:#f4f6f8;border:1px solid #e2e8f0;">
-                        <span class="material-symbols-outlined text-[14px] flex-shrink-0"
-                            style="color:#94a3b8;">tab</span>
-                        <select id="sectionFilter"
-                            class="flex-1 min-w-0 text-xs text-slate-700 outline-none bg-transparent cursor-pointer"
-                            onfocus="this.parentElement.style.borderColor='rgba(0,176,202,0.5)';"
-                            onblur="this.parentElement.style.borderColor='#e2e8f0';">
-                            <option value="">Todas las secciones</option>
-                        </select>
-                    </div>
-
-                    {{-- Limpiar filtros --}}
-                    <button id="btn-clear-filters"
-                        class="att-hidden h-7 px-2.5 rounded-md text-[11px] font-semibold transition-all flex-shrink-0 flex items-center justify-center gap-1 w-full sm:w-auto"
-                        style="color:#94a3b8;border:1px solid #e2e8f0;"
-                        onmouseover="this.style.color='rgb(220,50,50)';this.style.borderColor='rgba(220,50,50,0.3)';"
-                        onmouseout="this.style.color='#94a3b8';this.style.borderColor='#e2e8f0';">
-                        <span class="material-symbols-outlined text-[13px]">filter_list_off</span>
-                        Limpiar
-                    </button>
-
                 </div>
 
                 {{-- Aviso de rango de fecha --}}
