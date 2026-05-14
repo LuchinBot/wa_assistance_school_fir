@@ -411,56 +411,42 @@
 
 <body>
 
-    {{-- ── FOOTER FIJO ── --}}
-    <div class="page-footer">
-        <div class="footer-inner">
-            <div class="footer-left">
-                <span class="footer-accent">{{ env('APP_IE') }}</span>
-                · Reporte de Asistencia
-                @if ($scheduleInfo)
-                    · {{ $scheduleInfo->turn }}
-                @endif
-            </div>
-            <div class="footer-right">
-                Generado el {{ now()->format('d/m/Y') }} a las {{ now()->format('H:i') }}
-                &nbsp;·&nbsp;
-                {{ $dateFrom ? \Carbon\Carbon::parse($dateFrom)->format('d/m/Y') : '—' }}
-                →
-                {{ $dateTo ? \Carbon\Carbon::parse($dateTo)->format('d/m/Y') : '—' }}
-            </div>
-        </div>
-    </div>
-
     {{-- ── HEADER ── --}}
-    <div class="page-header">
-        <div class="header-inner">
+    <div style="padding:8px 16px;border-bottom:2px solid rgb(0,176,202);display:table;width:100%;box-sizing:border-box;">
 
-            <div class="header-logo-school">
-                @if ($logoSchoolBase64)
-                    <img src="{{ $logoSchoolBase64 }}" alt="I.E.">
-                @endif
-            </div>
-
-            <div class="header-divider">&nbsp;</div>
-
-            <div class="header-info">
-                <div class="header-institution">{{ env('APP_IE') }}</div>
-                <div class="header-title">Reporte de Asistencia</div>
-                <div class="header-subtitle">
-                    Documento generado automáticamente · {{ now()->isoFormat('D [de] MMMM [de] YYYY') }}
-                </div>
-            </div>
-
-            <div class="header-divider">&nbsp;</div>
-
-            <div class="header-logo-sys">
-                @if ($logoBase64)
-                    <img src="{{ $logoBase64 }}" alt="SCA">
-                @endif
-            </div>
-
+        {{-- Logo IE --}}
+        <div style="display:table-cell;width:28px;vertical-align:middle;">
+            @if ($logoSchoolBase64)
+                <img src="{{ $logoSchoolBase64 }}" alt="I.E." style="max-width:24px;max-height:24px;">
+            @endif
         </div>
-        <div class="header-stripe"></div>
+
+        {{-- Separador --}}
+        <div style="display:table-cell;width:1px;background:#e2e8f0;vertical-align:middle;">&nbsp;</div>
+
+        {{-- Texto central --}}
+        <div style="display:table-cell;vertical-align:middle;padding:0 12px;text-align:center;">
+            <span
+                style="font-family:'MonaSansExtraBold',sans-serif;font-size:11px;color:#0f172a;text-transform:uppercase;letter-spacing:0.02em;">{{ env('APP_IE') }}</span>
+            <span style="font-family:'MonaSansBold',sans-serif;font-size:9px;color:#475569;margin:0 6px;">·</span>
+            <span
+                style="font-family:'MonaSansBold',sans-serif;font-size:9px;color:#0f172a;text-transform:uppercase;">Reporte
+                de Asistencia por Fechas</span>
+            <span style="font-family:'MonaSansBold',sans-serif;font-size:9px;color:#475569;margin:0 6px;">·</span>
+            <span
+                style="font-family:'MonaSans',sans-serif;font-size:7.5px;color:rgb(0,176,202);letter-spacing:0.03em;">{{ now()->isoFormat('D [de] MMMM [de] YYYY') }}</span>
+        </div>
+
+        {{-- Separador --}}
+        <div style="display:table-cell;width:1px;background:#e2e8f0;vertical-align:middle;">&nbsp;</div>
+
+        {{-- Logo sistema --}}
+        <div style="display:table-cell;width:48px;vertical-align:middle;text-align:right;">
+            @if ($logoBase64)
+                <img src="{{ $logoBase64 }}" alt="SCA" style="max-width:44px;max-height:20px;">
+            @endif
+        </div>
+
     </div>
 
     @php
@@ -468,10 +454,10 @@
          * Mapa de status → letra y clase de badge
          */
         $statusLetterMap = [
-            'present'   => ['letter' => 'P', 'cls' => 'badge-P'],
-            'late'      => ['letter' => 'T', 'cls' => 'badge-T'],
+            'present' => ['letter' => 'P', 'cls' => 'badge-P'],
+            'late' => ['letter' => 'T', 'cls' => 'badge-T'],
             'justified' => ['letter' => 'J', 'cls' => 'badge-J'],
-            'absent'    => ['letter' => 'A', 'cls' => 'badge-A'],
+            'absent' => ['letter' => 'A', 'cls' => 'badge-A'],
         ];
 
         /*
@@ -491,22 +477,22 @@
         @foreach ($grouped as $groupKey => $groupStudents)
             @php
                 $firstStudent = $groupStudents->first();
-                $gs           = $firstStudent['grade_schedule'];
-                $gradeName    = $gs?->grade?->name_large ?? '—';
-                $sectionName  = $gs?->section ?? '—';
-                $levelName    = $gs?->grade?->level?->name ?? '';
+                $gs = $firstStudent['grade_schedule'];
+                $gradeName = $gs?->grade?->name_large ?? '—';
+                $sectionName = $gs?->section ?? '—';
+                $levelName = $gs?->grade?->level?->name ?? '';
 
                 // Stats del grupo
-                $gPresent   = $groupStudents->sum('present');
-                $gLate      = $groupStudents->sum('late');
+                $gPresent = $groupStudents->sum('present');
+                $gLate = $groupStudents->sum('late');
                 $gJustified = $groupStudents->sum('justified');
-                $gAbsent    = $groupStudents->sum('absent');
-                $gAttended  = $gPresent + $gLate + $gJustified;
-                $gTotal     = $gAttended + $gAbsent;
-                $gPct       = $gTotal > 0 ? round(($gAttended / $gTotal) * 100) : 0;
-                $gPctColor  = $gPct >= 80 ? 'rgb(5,150,105)' : ($gPct >= 60 ? 'rgb(180,115,0)' : 'rgb(220,50,50)');
+                $gAbsent = $groupStudents->sum('absent');
+                $gAttended = $gPresent + $gLate + $gJustified;
+                $gTotal = $gAttended + $gAbsent;
+                $gPct = $gTotal > 0 ? round(($gAttended / $gTotal) * 100) : 0;
+                $gPctColor = $gPct >= 80 ? 'rgb(5,150,105)' : ($gPct >= 60 ? 'rgb(180,115,0)' : 'rgb(220,50,50)');
 
-                $chunks      = $groupStudents->chunk($MAX_PER_PAGE);
+                $chunks = $groupStudents->chunk($MAX_PER_PAGE);
                 $totalChunks = $chunks->count();
             @endphp
 
@@ -529,8 +515,10 @@
                     </div>
                 @else
                     <div style="padding:4px 16px 2px;">
-                        <div style="font-family:'MonaSansBold',sans-serif;font-size:7px;color:#64748b;border-bottom:1px solid #e2e8f0;padding-bottom:2px;">
-                            <span style="color:rgb(0,176,202);">{{ $gradeName }} · Sección {{ $sectionName }}</span>
+                        <div
+                            style="font-family:'MonaSansBold',sans-serif;font-size:7px;color:#64748b;border-bottom:1px solid #e2e8f0;padding-bottom:2px;">
+                            <span style="color:rgb(0,176,202);">{{ $gradeName }} · Sección
+                                {{ $sectionName }}</span>
                         </div>
                     </div>
                 @endif
@@ -545,8 +533,10 @@
                                 <th class="col-name">Apellidos y Nombres</th>
                                 @foreach ($sessions as $session)
                                     <th class="day-head center" style="width:14px;">
-                                        {{ \Carbon\Carbon::parse($session->date)->format('d') }} {{ \Carbon\Carbon::parse($session->date)->isoFormat('MMM') }}<br>
-                                        <span style="font-family:'MonaSans',sans-serif;font-weight:400;font-size:5.5px;opacity:0.85;text-transform:none;letter-spacing:0;">
+                                        {{ \Carbon\Carbon::parse($session->date)->format('d') }}
+                                        {{ \Carbon\Carbon::parse($session->date)->isoFormat('MMM') }}<br>
+                                        <span
+                                            style="font-family:'MonaSans',sans-serif;font-weight:400;font-size:5.5px;opacity:0.85;text-transform:none;letter-spacing:0; text-transform: uppercase;">
                                             {{ \Carbon\Carbon::parse($session->date)->isoFormat('ddd') }}
                                         </span>
                                     </th>
@@ -558,14 +548,19 @@
                             @php $globalOffset = $chunkIndex * $MAX_PER_PAGE; @endphp
                             @foreach ($chunk as $i => $student)
                                 @php
-                                    $person   = $student['person'];
-                                    $pct      = $student['percentage'];
-                                    $pctColor = $pct >= 80
-                                        ? 'rgb(5,150,105)'
-                                        : ($pct >= 60 ? 'rgb(180,115,0)' : 'rgb(220,50,50)');
+                                    $person = $student['person'];
+                                    $pct = $student['percentage'];
+                                    $pctColor =
+                                        $pct >= 80
+                                            ? 'rgb(5,150,105)'
+                                            : ($pct >= 60
+                                                ? 'rgb(180,115,0)'
+                                                : 'rgb(220,50,50)');
 
-                                    $apellidos = trim(($person->lastname_father ?? '') . ' ' . ($person->lastname_mom ?? ''));
-                                    $fullName  = $apellidos . ', ' . ($person->firstname ?? '');
+                                    $apellidos = trim(
+                                        ($person->lastname_father ?? '') . ' ' . ($person->lastname_mom ?? ''),
+                                    );
+                                    $fullName = $apellidos . ', ' . ($person->firstname ?? '');
                                 @endphp
                                 <tr>
                                     <td class="num-col">{{ $globalOffset + $i + 1 }}</td>
@@ -575,7 +570,7 @@
                                     @foreach ($sessions as $j => $session)
                                         @php
                                             $statusKey = $student['daily'][$j] ?? 'absent';
-                                            $badge     = $statusLetterMap[$statusKey] ?? $statusLetterMap['absent'];
+                                            $badge = $statusLetterMap[$statusKey] ?? $statusLetterMap['absent'];
                                         @endphp
                                         <td class="center" style="padding:1px 0;">
                                             <span class="badge-day {{ $badge['cls'] }}">{{ $badge['letter'] }}</span>
@@ -584,9 +579,12 @@
 
                                     <td class="center">
                                         <div class="pct-wrap">
-                                            <div class="pct-text" style="color:{{ $pctColor }};">{{ $pct }}%</div>
+                                            <div class="pct-text" style="color:{{ $pctColor }};">
+                                                {{ $pct }}%</div>
                                             <div class="pct-bar-bg">
-                                                <div class="pct-bar-fill" style="width:{{ $pct }}%;background:{{ $pctColor }};"></div>
+                                                <div class="pct-bar-fill"
+                                                    style="width:{{ $pct }}%;background:{{ $pctColor }};">
+                                                </div>
                                             </div>
                                         </div>
                                     </td>
@@ -601,11 +599,16 @@
                     <div class="group-footer">
                         <div class="group-footer-inner">
                             <div class="gf-cell"><b>{{ $groupStudents->count() }}</b> estudiantes</div>
-                            <div class="gf-cell">Presentes: <b style="color:rgb(5,150,105);">{{ $gPresent }}</b></div>
-                            <div class="gf-cell">Tardanzas: <b style="color:rgb(180,115,0);">{{ $gLate }}</b></div>
-                            <div class="gf-cell">Justificados: <b style="color:rgb(161,136,0);">{{ $gJustified }}</b></div>
-                            <div class="gf-cell">Ausentes: <b style="color:rgb(220,50,50);">{{ $gAbsent }}</b></div>
-                            <div class="gf-cell">% Asistencia: <b style="color:{{ $gPctColor }};">{{ $gPct }}%</b></div>
+                            <div class="gf-cell">Presentes: <b style="color:rgb(5,150,105);">{{ $gPresent }}</b>
+                            </div>
+                            <div class="gf-cell">Tardanzas: <b style="color:rgb(180,115,0);">{{ $gLate }}</b>
+                            </div>
+                            <div class="gf-cell">Justificados: <b style="color:rgb(161,136,0);">{{ $gJustified }}</b>
+                            </div>
+                            <div class="gf-cell">Ausentes: <b style="color:rgb(220,50,50);">{{ $gAbsent }}</b>
+                            </div>
+                            <div class="gf-cell">% Asistencia: <b
+                                    style="color:{{ $gPctColor }};">{{ $gPct }}%</b></div>
                         </div>
                     </div>
                 @endif
@@ -618,7 +621,6 @@
                 @if (!($isLastGroup && $isLastChunk))
                     <div class="page-break"></div>
                 @endif
-
             @endforeach {{-- /chunks --}}
         @endforeach {{-- /grouped --}}
     @endif
