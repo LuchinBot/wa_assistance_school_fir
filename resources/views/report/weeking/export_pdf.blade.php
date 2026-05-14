@@ -547,10 +547,10 @@
                                 <th class="col-name">Apellidos y Nombres</th>
                                 @foreach ($sessions as $session)
                                     <th class="day-head center" style="width:14px;">
-                                        {{ \Carbon\Carbon::parse($session->date)->format('d') }}
-                                        {{ \Carbon\Carbon::parse($session->date)->isoFormat('ddd') }} ·<br>
+                                        {{ \Carbon\Carbon::parse($session->date)->format('d') }} ·
+                                        {{ \Carbon\Carbon::parse($session->date)->isoFormat('MMM') }}<br>
                                         <span style="...">
-                                            {{ \Carbon\Carbon::parse($session->date)->isoFormat('MMM') }}
+                                            {{ \Carbon\Carbon::parse($session->date)->isoFormat('ddd') }}
                                         </span>
                                     </th>
                                 @endforeach
