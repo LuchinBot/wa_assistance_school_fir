@@ -480,7 +480,7 @@
                 $gs = $firstStudent['grade_schedule'];
                 $gradeName = $gs?->grade?->name_large ?? '—';
                 $sectionName = $gs?->section ?? '—';
-                $levelName = $gs?->grade?->level?->name ?? '';
+                $levelName = $gs?->grade?->level?->name_large ?? '';
 
                 // Stats del grupo
                 $gPresent = $groupStudents->sum('present');
@@ -505,11 +505,8 @@
                         <div class="group-header-inner">
                             <div class="group-center">
                                 <span class="group-tag">
-                                    {{ $gradeName }} · ({{ $sectionName }})
+                                    {{ $gradeName }} · ({{ $sectionName }}) · {{ $levelName }}
                                 </span>
-                                @if ($levelName)
-                                    <span class="group-level">{{ $levelName }}</span>
-                                @endif
                             </div>
                         </div>
                     </div>
