@@ -1,8 +1,8 @@
 {
     "monasans": {
-        "normal": "D:\\00 - PROGRAMMING\\0 - LOCAL\\PHP\\wa_assistance_school\\storage\\fonts\/monasans_normal_1c514e48e2b4e36fb0dd49e9e4026f35",
+        "normal": "monasans_normal_1c514e48e2b4e36fb0dd49e9e4026f35",
         "bold": "D:\\00 - PROGRAMMING\\0 - LOCAL\\PHP\\wa_assistance_school\\storage\\fonts\/monasans_bold_a6781dcc90f17f6200be8b020a54b405",
-        "900": "monasans_900_ccee45f0487f074a83ccdcc62105433f"
+        "900": "D:\\00 - PROGRAMMING\\0 - LOCAL\\PHP\\wa_assistance_school_fir\\storage\\fonts\/monasans_900_ccee45f0487f074a83ccdcc62105433f"
     },
     "monasansbold": {
         "normal": "monasansbold_normal_a6781dcc90f17f6200be8b020a54b405"

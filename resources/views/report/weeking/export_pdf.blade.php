@@ -27,7 +27,7 @@
 
         body {
             font-family: 'MonaSans', sans-serif;
-            font-size: 8.5px;
+            font-size: 7px;
             color: #1e293b;
             background: #fff;
         }
@@ -39,8 +39,8 @@
 
         /* ── HEADER ── */
         .page-header {
-            padding: 14px 24px 0;
-            border-bottom: 3px solid rgb(0, 176, 202);
+            padding: 8px 16px 0;
+            border-bottom: 2px solid rgb(0, 176, 202);
         }
 
         .header-inner {
@@ -50,13 +50,13 @@
 
         .header-logo-school {
             display: table-cell;
-            width: 52px;
+            width: 38px;
             vertical-align: middle;
         }
 
         .header-logo-school img {
-            max-width: 46px;
-            max-height: 46px;
+            max-width: 34px;
+            max-height: 34px;
         }
 
         .header-divider {
@@ -72,179 +72,75 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            gap: 1px;
-            padding: 0 14px;
+            gap: 0px;
+            padding: 0 10px;
             text-align: center;
         }
 
         .header-institution {
             font-family: 'MonaSansExtraBold', sans-serif;
-            font-size: 22px;
+            font-size: 14px;
             color: #0f172a;
-            line-height: 0.8;
+            line-height: 1;
             text-transform: uppercase;
             margin: 0;
         }
 
         .header-title {
             font-family: 'MonaSansBold', sans-serif;
-            font-size: 19px;
+            font-size: 11px;
             color: #0f172a;
-            line-height: 0.8;
+            line-height: 1.1;
             text-transform: uppercase;
             margin: 0;
         }
 
         .header-subtitle {
             font-family: 'MonaSansBold', sans-serif;
-            font-size: 9px;
+            font-size: 7px;
             color: rgb(0, 176, 202);
-            margin-top: 2px;
+            margin-top: 1px;
             letter-spacing: 0.04em;
             text-transform: uppercase;
         }
 
         .header-logo-sys {
             display: table-cell;
-            width: 68px;
+            width: 52px;
             vertical-align: middle;
             text-align: right;
         }
 
         .header-logo-sys img {
-            max-width: 64px;
-            max-height: 32px;
+            max-width: 48px;
+            max-height: 24px;
         }
 
         .header-stripe {
-            height: 3px;
-            margin-top: 10px;
+            height: 2px;
+            margin-top: 6px;
             background: rgb(0, 176, 202);
         }
-
-        /* ── META ── */
-        .meta-section {
-            padding: 7px 24px;
-            background: #f8fafc;
-            border-bottom: 1px solid #e8edf2;
-        }
-
-        .meta-table {
-            display: table;
-            width: 100%;
-        }
-
-        .meta-cell {
-            display: table-cell;
-            vertical-align: top;
-            padding-right: 14px;
-        }
-
-        .meta-label {
-            font-family: 'MonaSansBold', sans-serif;
-            font-size: 6.5px;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: #94a3b8;
-            margin-bottom: 2px;
-        }
-
-        .meta-value {
-            font-family: 'MonaSansBold', sans-serif;
-            font-size: 8.5px;
-            color: #1e293b;
-        }
-
-        .meta-cell-right {
-            display: table-cell;
-            vertical-align: middle;
-            text-align: right;
-            white-space: nowrap;
-        }
-
-        .meta-badge {
-            display: inline-block;
-            background: rgba(0, 176, 202, 0.08);
-            border: 1px solid rgba(0, 176, 202, 0.25);
-            border-radius: 6px;
-            padding: 5px 12px;
-            text-align: center;
-        }
-
-        .meta-badge-num {
-            font-family: 'MonaSansExtraBold', sans-serif;
-            font-size: 18px;
-            color: rgb(0, 176, 202);
-            line-height: 1;
-        }
-
-        .meta-badge-label {
-            font-family: 'MonaSansBold', sans-serif;
-            font-size: 6.5px;
-            color: #64748b;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            margin-top: 2px;
-        }
-
-        /* ── LEYENDA ── */
-        .legend-section {
-            padding: 5px 24px;
-            background: #fff;
-            border-bottom: 1px solid #f1f5f9;
-        }
-
-        .legend-inner {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .legend-item {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 9px;
-            color: #475569;
-            white-space: nowrap;
-        }
-
-        .legend-text {
-            white-space: nowrap;
-        }
-
-        .legend-dot {
-            display: inline-block;
-            width: 9px;
-            height: 9px;
-            border-radius: 2px;
-            margin-right: 3px;
-        }
-
 
         /* ── SEPARADOR DE GRUPO ── */
         .group-header {
             display: flex;
-            justify-content: center;
+            justify-content: flex-start;
             align-items: center;
-            padding: 8px 24px;
+            padding: 4px 16px 2px;
         }
 
         .group-header-inner {
             width: 100%;
         }
 
-        /* 🔥 ESTE ES EL CONTENEDOR CLAVE */
         .group-center {
             display: inline-flex;
             align-items: center;
-            justify-content: center;
-            gap: 6px;
-            /* espacio entre tag y nivel */
+            justify-content: flex-start;
+            gap: 5px;
         }
 
-        /* Tu tag (ajustado) */
         .group-tag {
             display: inline-flex;
             align-items: center;
@@ -252,61 +148,26 @@
             background: rgb(221, 217, 217);
             color: #000000;
             border-left: 2px solid black;
-            padding: 2px 8px;
-            font-size: 9px;
+            padding: 1px 6px;
+            font-size: 8px;
             font-family: 'MonaSansBold', sans-serif;
         }
 
-        /* Texto del nivel */
         .group-level {
             font-family: 'MonaSansBold', sans-serif;
-            font-size: 9px;
+            font-size: 8px;
             color: #64748b;
-        }
-
-
-        .stat-item {
-            display: inline-flex;
-            align-items: center;
-            gap: 2px;
-            white-space: nowrap;
-            font-size: 7px;
-            color: #64748b;
-        }
-
-        .stat-item b {
-            font-family: 'MonaSansBold', sans-serif;
-            color: #1e293b;
-        }
-
-        .stat-P b {
-            color: rgb(5, 150, 105);
-        }
-
-        .stat-T b {
-            color: rgb(180, 115, 0);
-        }
-
-        .stat-J b {
-            color: rgb(161, 136, 0);
-        }
-
-        .stat-A b {
-            color: rgb(220, 50, 50);
-        }
-
-        .stat-sep {
-            color: #94a3b8;
         }
 
         /* ── TABLA ── */
         .table-section {
-            padding: 3px 24px 0;
+            padding: 2px 16px 0;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
+            table-layout: fixed;
         }
 
         thead tr {
@@ -315,16 +176,24 @@
 
         thead th {
             font-family: 'MonaSansBold', sans-serif;
-            padding: 5px 6px;
+            padding: 3px 2px;
             text-align: left;
-            font-size: 9px;
+            font-size: 7px;
             text-transform: uppercase;
-            letter-spacing: 0.06em;
+            letter-spacing: 0.04em;
             color: #fff;
+            overflow: hidden;
         }
 
         thead th.center {
             text-align: center;
+        }
+
+        /* Columnas fijas siempre alineadas a la izquierda */
+        thead th.col-num,
+        thead th.col-dni,
+        thead th.col-name {
+            text-align: left !important;
         }
 
         tbody tr:nth-child(even) {
@@ -336,10 +205,12 @@
         }
 
         tbody td {
-            padding: 4px 6px;
-            font-size: 9px;
+            padding: 2px 2px;
+            font-size: 7px;
             color: #334155;
             vertical-align: middle;
+            overflow: hidden;
+            text-align: left;
         }
 
         tbody td.center {
@@ -348,21 +219,27 @@
 
         .num-col {
             color: #94a3b8;
-            font-size: 9px;
-            text-align: center;
+            font-size: 7px;
+            text-align: center !important;
         }
 
         .name-col {
             font-family: 'MonaSansBold', sans-serif;
             color: #000000;
-            font-size: 9px;
+            font-size: 7px;
             text-transform: uppercase;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-align: left !important;
         }
 
         .dni-col {
-            font-size: 9px;
+            font-size: 7px;
             font-family: 'MonaSansBold', sans-serif;
             color: #000000;
+            white-space: nowrap;
+            text-align: left !important;
         }
 
         /* ── BADGES DE DÍA ── */
@@ -370,11 +247,12 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 16px;
-            height: 16px;
-            border-radius: 3px;
+            width: 13px;
+            height: 13px;
+            border-radius: 2px;
             font-family: 'MonaSansBold', sans-serif;
-            font-size: 9px;
+            font-size: 7px;
+            line-height: 1;
         }
 
         .badge-P {
@@ -402,31 +280,6 @@
             color: #cbd5e1;
         }
 
-        /* ── CONTADORES POR FILA ── */
-        .count-P {
-            font-family: 'MonaSansBold', sans-serif;
-            color: rgb(5, 150, 105);
-            font-size: 7.5px;
-        }
-
-        .count-T {
-            font-family: 'MonaSansBold', sans-serif;
-            color: rgb(180, 115, 0);
-            font-size: 7.5px;
-        }
-
-        .count-J {
-            font-family: 'MonaSansBold', sans-serif;
-            color: rgb(161, 136, 0);
-            font-size: 7.5px;
-        }
-
-        .count-A {
-            font-family: 'MonaSansBold', sans-serif;
-            color: rgb(220, 50, 50);
-            font-size: 7.5px;
-        }
-
         /* ── BARRA % ── */
         .pct-wrap {
             text-align: center;
@@ -434,17 +287,17 @@
 
         .pct-text {
             font-family: 'MonaSansExtraBold', sans-serif;
-            font-size: 7.5px;
+            font-size: 7px;
             line-height: 1;
         }
 
         .pct-bar-bg {
-            width: 28px;
-            height: 3px;
+            width: 22px;
+            height: 2px;
             background: #e8edf2;
             border-radius: 2px;
             overflow: hidden;
-            margin: 2px auto 0;
+            margin: 1px auto 0;
         }
 
         .pct-bar-fill {
@@ -458,7 +311,7 @@
             bottom: 0;
             left: 0;
             right: 0;
-            padding: 5px 24px;
+            padding: 3px 16px;
             border-top: 1px solid #e8edf2;
             background: #fff;
         }
@@ -471,7 +324,7 @@
         .footer-left {
             display: table-cell;
             vertical-align: middle;
-            font-size: 6.5px;
+            font-size: 6px;
             color: #94a3b8;
         }
 
@@ -479,7 +332,7 @@
             display: table-cell;
             vertical-align: middle;
             text-align: right;
-            font-size: 6.5px;
+            font-size: 6px;
             color: #94a3b8;
         }
 
@@ -507,14 +360,15 @@
 
         /* Cabecera de día en tabla */
         .day-head {
-            font-size: 9px;
+            font-size: 6.5px;
             white-space: nowrap;
             text-align: center;
+            padding: 2px 1px !important;
         }
 
         /* Resumen de grupo al pie de tabla */
         .group-footer {
-            padding: 4px 24px 6px;
+            padding: 2px 16px 4px;
         }
 
         .group-footer-inner {
@@ -523,15 +377,15 @@
             background: rgba(0, 176, 202, 0.04);
             border: 1px solid rgba(0, 176, 202, 0.15);
             border-radius: 4px;
-            padding: 4px 10px;
+            padding: 3px 8px;
         }
 
         .gf-cell {
             display: table-cell;
             vertical-align: middle;
-            font-size: 9px;
+            font-size: 7px;
             color: #475569;
-            padding-right: 14px;
+            padding-right: 10px;
             font-family: 'MonaSansBold', sans-serif;
         }
 
@@ -548,7 +402,7 @@
         <div class="footer-inner">
             <div class="footer-left">
                 <span class="footer-accent">{{ env('APP_IE') }}</span>
-                · Reporte Semanal de Asistencia
+                · Reporte de Asistencia
                 @if ($scheduleInfo)
                     · {{ $scheduleInfo->turn }}
                 @endif
@@ -577,7 +431,7 @@
 
             <div class="header-info">
                 <div class="header-institution">{{ env('APP_IE') }}</div>
-                <div class="header-title">Reporte Semanal de Asistencia</div>
+                <div class="header-title">Reporte de Asistencia</div>
                 <div class="header-subtitle">
                     Documento generado automáticamente · {{ now()->isoFormat('D [de] MMMM [de] YYYY') }}
                 </div>
@@ -595,118 +449,42 @@
         <div class="header-stripe"></div>
     </div>
 
-    {{-- ── META ── --}}
-    <div class="meta-section">
-        <div class="meta-table">
-
-            <div class="meta-cell">
-                <div class="meta-label">Rango de fechas</div>
-                <div class="meta-value">
-                    {{ $dateFrom ? \Carbon\Carbon::parse($dateFrom)->isoFormat('ddd D MMM') : '—' }}
-                    →
-                    {{ $dateTo ? \Carbon\Carbon::parse($dateTo)->isoFormat('ddd D MMM YYYY') : '—' }}
-                </div>
-            </div>
-
-            @if ($scheduleInfo)
-                <div class="meta-cell">
-                    <div class="meta-label">Horario</div>
-                    <div class="meta-value">{{ $scheduleInfo->turn }} · {{ $scheduleInfo->time_start }} –
-                        {{ $scheduleInfo->time_end }}</div>
-                </div>
-            @endif
-
-            @if ($periodInfo)
-                <div class="meta-cell">
-                    <div class="meta-label">Período</div>
-                    <div class="meta-value">{{ $periodInfo->name }}</div>
-                </div>
-            @endif
-
-            @if ($gradeInfo)
-                <div class="meta-cell">
-                    <div class="meta-label">Grado</div>
-                    <div class="meta-value">
-                        {{ $gradeInfo->name_large }}
-                        @if ($gradeInfo->level)
-                            ({{ $gradeInfo->level->name }})
-                        @endif
-                    </div>
-                </div>
-            @endif
-
-            @if ($sectionInfo)
-                <div class="meta-cell">
-                    <div class="meta-label">Sección</div>
-                    <div class="meta-value">{{ $sectionInfo->section }}</div>
-                </div>
-            @endif
-
-            <div class="meta-cell">
-                <div class="meta-label">Sesiones</div>
-                <div class="meta-value">{{ $totalDays }} día{{ $totalDays !== 1 ? 's' : '' }}</div>
-            </div>
-
-            {{-- <div class="meta-cell-right">
-                <div class="meta-badge">
-                    <div class="meta-badge-num">{{ $students->count() }}</div>
-                    <div class="meta-badge-label">Estudiantes</div>
-                </div>
-            </div> --}}
-
-        </div>
-    </div>
-
-    {{-- ── LEYENDA ── --}}
-    <div class="legend-section">
-        <div class="legend-inner">
-            <div class="legend-item">
-                <span class="legend-dot" style="background:rgba(16,185,129,0.25);"></span>
-                <span class="legend-text">
-                    <b style="color:rgb(5,150,105);">P</b> = Presente
-                </span>
-            </div>
-            <div class="legend-item">
-                <span class="legend-dot" style="background:rgba(245,158,11,0.25);"></span>
-                <span class="legend-text">
-                    <b style="color:rgb(180,115,0);">T</b> = Tardanza
-                </span>
-            </div>
-            <div class="legend-item">
-                <span class="legend-dot" style="background:rgba(234,179,8,0.30);"></span>
-                <span class="legend-text">
-                    <b style="color:rgb(161,136,0);">J</b> = Justificado
-                </span>
-            </div>
-            <div class="legend-item">
-                <span class="legend-dot" style="background:rgba(239,68,68,0.20);"></span>
-                <span class="legend-text">
-                    <b style="color:rgb(220,50,50);">A</b> = Ausente
-                </span>
-            </div>
-        </div>
-    </div>
-
     @php
         /*
          * Mapa de status → letra y clase de badge
          */
         $statusLetterMap = [
-            'present' => ['letter' => 'P', 'cls' => 'badge-P'],
-            'late' => ['letter' => 'T', 'cls' => 'badge-T'],
+            'present'   => ['letter' => 'P', 'cls' => 'badge-P'],
+            'late'      => ['letter' => 'T', 'cls' => 'badge-T'],
             'justified' => ['letter' => 'J', 'cls' => 'badge-J'],
-            'absent' => ['letter' => 'A', 'cls' => 'badge-A'],
+            'absent'    => ['letter' => 'A', 'cls' => 'badge-A'],
         ];
 
         /*
-         * Agrupar por grado + sección (ya vienen ordenados desde el controller)
+         * Agrupar por grado + sección
          */
         $grouped = $students->groupBy(function ($s) {
             $gs = $s['grade_schedule'];
             return ($gs?->grade?->name_large ?? 'ZZZ') . '||' . ($gs?->section ?? 'Z');
         });
 
-        $MAX_PER_PAGE = 40; // máx estudiantes por hoja por grupo
+        $MAX_PER_PAGE = 40;
+
+        /*
+         * Cálculo dinámico de anchos de columna
+         * A4 landscape usable ≈ 267mm = 756px @ 96dpi (wkhtmltopdf usa 96dpi)
+         * Reservamos: # (14px) + DNI (52px) + Nombre (variable) + % (30px)
+         * El resto se reparte entre las sesiones
+         */
+        $sessionCount = count($sessions);
+
+        // Ancho fijo de columnas no-sesión (en px, aproximado)
+        $fixedWidth = 14 + 52 + 30; // # + DNI + %
+        $usable = 756 - 32; // 756px total - 32px padding (16px cada lado)
+        $nameWidth = max(90, min(160, $usable - $fixedWidth - ($sessionCount * 14)));
+        $dayColWidth = ($sessionCount > 0)
+            ? max(11, floor(($usable - $fixedWidth - $nameWidth) / $sessionCount))
+            : 14;
     @endphp
 
     @if ($students->isEmpty())
@@ -715,23 +493,22 @@
         @foreach ($grouped as $groupKey => $groupStudents)
             @php
                 $firstStudent = $groupStudents->first();
-                $gs = $firstStudent['grade_schedule'];
-                $gradeName = $gs?->grade?->name_large ?? '—';
-                $sectionName = $gs?->section ?? '—';
-                $levelName = $gs?->grade?->level?->name ?? '';
+                $gs           = $firstStudent['grade_schedule'];
+                $gradeName    = $gs?->grade?->name_large ?? '—';
+                $sectionName  = $gs?->section ?? '—';
+                $levelName    = $gs?->grade?->level?->name ?? '';
 
                 // Stats del grupo
-                $gPresent = $groupStudents->sum('present');
-                $gLate = $groupStudents->sum('late');
+                $gPresent   = $groupStudents->sum('present');
+                $gLate      = $groupStudents->sum('late');
                 $gJustified = $groupStudents->sum('justified');
-                $gAbsent = $groupStudents->sum('absent');
-                $gAttended = $gPresent + $gLate + $gJustified;
-                $gTotal = $gAttended + $gAbsent;
-                $gPct = $gTotal > 0 ? round(($gAttended / $gTotal) * 100) : 0;
-                $gPctColor = $gPct >= 80 ? 'rgb(5,150,105)' : ($gPct >= 60 ? 'rgb(180,115,0)' : 'rgb(220,50,50)');
+                $gAbsent    = $groupStudents->sum('absent');
+                $gAttended  = $gPresent + $gLate + $gJustified;
+                $gTotal     = $gAttended + $gAbsent;
+                $gPct       = $gTotal > 0 ? round(($gAttended / $gTotal) * 100) : 0;
+                $gPctColor  = $gPct >= 80 ? 'rgb(5,150,105)' : ($gPct >= 60 ? 'rgb(180,115,0)' : 'rgb(220,50,50)');
 
-                // Dividir en páginas de MAX_PER_PAGE estudiantes
-                $chunks = $groupStudents->chunk($MAX_PER_PAGE);
+                $chunks      = $groupStudents->chunk($MAX_PER_PAGE);
                 $totalChunks = $chunks->count();
             @endphp
 
@@ -746,7 +523,6 @@
                                 <span class="group-tag">
                                     {{ $gradeName }} · ({{ $sectionName }})
                                 </span>
-
                                 @if ($levelName)
                                     <span class="group-level">{{ $levelName }}</span>
                                 @endif
@@ -754,12 +530,9 @@
                         </div>
                     </div>
                 @else
-                    {{-- Continuación: pequeña etiqueta de grupo --}}
-                    <div style="padding:6px 24px 2px;">
-                        <div
-                            style="font-family:'MonaSansBold',sans-serif;font-size:7.5px;color:#64748b;border-bottom:1px solid #e2e8f0;padding-bottom:3px;">
-                            <span style="color:rgb(0,176,202);">{{ $gradeName }} · Sección
-                                {{ $sectionName }}</span>
+                    <div style="padding:4px 16px 2px;">
+                        <div style="font-family:'MonaSansBold',sans-serif;font-size:7px;color:#64748b;border-bottom:1px solid #e2e8f0;padding-bottom:2px;">
+                            <span style="color:rgb(0,176,202);">{{ $gradeName }} · Sección {{ $sectionName }}</span>
                         </div>
                     </div>
                 @endif
@@ -767,75 +540,64 @@
                 {{-- ── TABLA DEL CHUNK ── --}}
                 <div class="table-section">
                     <table>
+                        <colgroup>
+                            <col style="width:14px;">
+                            <col style="width:52px;">
+                            <col style="width:{{ $nameWidth }}px;">
+                            @foreach ($sessions as $session)
+                                <col style="width:{{ $dayColWidth }}px;">
+                            @endforeach
+                            <col style="width:30px;">
+                        </colgroup>
                         <thead>
                             <tr>
-                                <th style="width:18px;" class="center">#</th>
-                                <th style="width:52px;">DNI</th>
-                                <th>Apellidos y Nombres</th>
-                                {{-- Columnas por sesión --}}
+                                <th class="col-num center" style="width:14px;">#</th>
+                                <th class="col-dni" style="width:52px;">DNI</th>
+                                <th class="col-name">Apellidos y Nombres</th>
                                 @foreach ($sessions as $session)
                                     <th class="day-head center">
-                                        {{ \Carbon\Carbon::parse($session->date)->format('d/m') }}<br>
-                                        <span style="font-family:'MonaSans',sans-serif;font-weight:400;opacity:0.85;">
+                                        {{ \Carbon\Carbon::parse($session->date)->format('d') }}<br>
+                                        <span style="font-family:'MonaSans',sans-serif;font-weight:400;font-size:5.5px;opacity:0.85;text-transform:none;letter-spacing:0;">
                                             {{ \Carbon\Carbon::parse($session->date)->isoFormat('ddd') }}
                                         </span>
                                     </th>
                                 @endforeach
-                                {{-- <th class="center" style="width:18px;color:rgb(5,150,105);">P</th>
-                                <th class="center" style="width:18px;color:rgb(245,158,11);">T</th>
-                                <th class="center" style="width:18px;color:rgb(161,136,0);">J</th>
-                                <th class="center" style="width:18px;color:rgb(220,50,50);">A</th> --}}
-                                <th class="center" style="width:42px;">%</th>
+                                <th class="center" style="width:30px;">%</th>
                             </tr>
                         </thead>
                         <tbody>
                             @php $globalOffset = $chunkIndex * $MAX_PER_PAGE; @endphp
                             @foreach ($chunk as $i => $student)
                                 @php
-                                    $person = $student['person'];
-                                    $pct = $student['percentage'];
-                                    $pctColor =
-                                        $pct >= 80
-                                            ? 'rgb(5,150,105)'
-                                            : ($pct >= 60
-                                                ? 'rgb(180,115,0)'
-                                                : 'rgb(220,50,50)');
+                                    $person   = $student['person'];
+                                    $pct      = $student['percentage'];
+                                    $pctColor = $pct >= 80
+                                        ? 'rgb(5,150,105)'
+                                        : ($pct >= 60 ? 'rgb(180,115,0)' : 'rgb(220,50,50)');
 
-                                    // Apellidos, Nombres
-                                    $apellidos = trim(
-                                        ($person->lastname_father ?? '') . ' ' . ($person->lastname_mom ?? ''),
-                                    );
-                                    $fullName = $apellidos . ', ' . ($person->firstname ?? '');
+                                    $apellidos = trim(($person->lastname_father ?? '') . ' ' . ($person->lastname_mom ?? ''));
+                                    $fullName  = $apellidos . ', ' . ($person->firstname ?? '');
                                 @endphp
                                 <tr>
                                     <td class="num-col">{{ $globalOffset + $i + 1 }}</td>
                                     <td class="dni-col">{{ $person->identify_number ?? '—' }}</td>
-                                    <td class="name-col">{{ $fullName }}</td>
+                                    <td class="name-col" title="{{ $fullName }}">{{ $fullName }}</td>
 
-                                    {{-- Celda por sesión --}}
                                     @foreach ($sessions as $j => $session)
                                         @php
                                             $statusKey = $student['daily'][$j] ?? 'absent';
-                                            $badge = $statusLetterMap[$statusKey] ?? $statusLetterMap['absent'];
+                                            $badge     = $statusLetterMap[$statusKey] ?? $statusLetterMap['absent'];
                                         @endphp
-                                        <td class="center">
+                                        <td class="center" style="padding:1px 0;">
                                             <span class="badge-day {{ $badge['cls'] }}">{{ $badge['letter'] }}</span>
                                         </td>
                                     @endforeach
 
-                                    {{-- <td class="center count-P">{{ $student['present'] }}</td>
-                                    <td class="center count-T">{{ $student['late'] }}</td>
-                                    <td class="center count-J">{{ $student['justified'] }}</td>
-                                    <td class="center count-A">{{ $student['absent'] }}</td> --}}
-
                                     <td class="center">
                                         <div class="pct-wrap">
-                                            <div class="pct-text" style="color:{{ $pctColor }};">
-                                                {{ $pct }}%</div>
+                                            <div class="pct-text" style="color:{{ $pctColor }};">{{ $pct }}%</div>
                                             <div class="pct-bar-bg">
-                                                <div class="pct-bar-fill"
-                                                    style="width:{{ $pct }}%;background:{{ $pctColor }};">
-                                                </div>
+                                                <div class="pct-bar-fill" style="width:{{ $pct }}%;background:{{ $pctColor }};"></div>
                                             </div>
                                         </div>
                                     </td>
@@ -849,29 +611,17 @@
                 @if ($chunkIndex === $totalChunks - 1)
                     <div class="group-footer">
                         <div class="group-footer-inner">
-                            <div class="gf-cell">
-                                <b>{{ $groupStudents->count() }}</b> estudiantes en total
-                            </div>
-                            <div class="gf-cell">
-                                Presentes: <b style="color:rgb(5,150,105);">{{ $gPresent }}</b>
-                            </div>
-                            <div class="gf-cell">
-                                Tardanzas: <b style="color:rgb(180,115,0);">{{ $gLate }}</b>
-                            </div>
-                            <div class="gf-cell">
-                                Justificados: <b style="color:rgb(161,136,0);">{{ $gJustified }}</b>
-                            </div>
-                            <div class="gf-cell">
-                                Ausentes: <b style="color:rgb(220,50,50);">{{ $gAbsent }}</b>
-                            </div>
-                            <div class="gf-cell">
-                                % Asistencia: <b style="color:{{ $gPctColor }};">{{ $gPct }}%</b>
-                            </div>
+                            <div class="gf-cell"><b>{{ $groupStudents->count() }}</b> estudiantes</div>
+                            <div class="gf-cell">Presentes: <b style="color:rgb(5,150,105);">{{ $gPresent }}</b></div>
+                            <div class="gf-cell">Tardanzas: <b style="color:rgb(180,115,0);">{{ $gLate }}</b></div>
+                            <div class="gf-cell">Justificados: <b style="color:rgb(161,136,0);">{{ $gJustified }}</b></div>
+                            <div class="gf-cell">Ausentes: <b style="color:rgb(220,50,50);">{{ $gAbsent }}</b></div>
+                            <div class="gf-cell">% Asistencia: <b style="color:{{ $gPctColor }};">{{ $gPct }}%</b></div>
                         </div>
                     </div>
                 @endif
 
-                {{-- Salto de página entre chunks o entre grupos (no al final) --}}
+                {{-- Salto de página entre chunks o entre grupos --}}
                 @php
                     $isLastGroup = $loop->parent->last;
                     $isLastChunk = $chunkIndex === $totalChunks - 1;
@@ -879,9 +629,9 @@
                 @if (!($isLastGroup && $isLastChunk))
                     <div class="page-break"></div>
                 @endif
+
             @endforeach {{-- /chunks --}}
         @endforeach {{-- /grouped --}}
-
     @endif
 
 </body>
