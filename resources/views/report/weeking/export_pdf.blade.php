@@ -167,7 +167,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            table-layout: fixed;
+            table-layout: auto;
         }
 
         thead tr {
@@ -217,29 +217,43 @@
             text-align: center;
         }
 
-        .num-col {
+        /* Las 3 columnas fijas: width:1px + white-space:nowrap = encogerse al contenido */
+        .num-col,
+        thead th.col-num {
+            width: 1px;
+            white-space: nowrap;
             color: #94a3b8;
             font-size: 7px;
             text-align: center !important;
+            padding-left: 4px !important;
+            padding-right: 4px !important;
         }
 
-        .name-col {
+        .dni-col,
+        thead th.col-dni {
+            width: 1px;
+            white-space: nowrap;
+            font-size: 7px;
+            font-family: 'MonaSansBold', sans-serif;
+            color: #000000;
+            text-align: left !important;
+            padding-left: 4px !important;
+            padding-right: 6px !important;
+        }
+
+        .name-col,
+        thead th.col-name {
+            white-space: nowrap;
             font-family: 'MonaSansBold', sans-serif;
             color: #000000;
             font-size: 7px;
             text-transform: uppercase;
-            white-space: nowrap;
+            text-align: left !important;
+            padding-left: 4px !important;
+            padding-right: 8px !important;
             overflow: hidden;
             text-overflow: ellipsis;
-            text-align: left !important;
-        }
-
-        .dni-col {
-            font-size: 7px;
-            font-family: 'MonaSansBold', sans-serif;
-            color: #000000;
-            white-space: nowrap;
-            text-align: left !important;
+            max-width: 155px;
         }
 
         /* ── BADGES DE DÍA ── */
@@ -469,22 +483,6 @@
         });
 
         $MAX_PER_PAGE = 40;
-
-        /*
-         * Cálculo dinámico de anchos de columna
-         * A4 landscape usable ≈ 267mm = 756px @ 96dpi (wkhtmltopdf usa 96dpi)
-         * Reservamos: # (14px) + DNI (52px) + Nombre (variable) + % (30px)
-         * El resto se reparte entre las sesiones
-         */
-        $sessionCount = count($sessions);
-
-        // Ancho fijo de columnas no-sesión (en px, aproximado)
-        $fixedWidth = 14 + 52 + 30; // # + DNI + %
-        $usable = 756 - 32; // 756px total - 32px padding (16px cada lado)
-        $nameWidth = max(90, min(160, $usable - $fixedWidth - ($sessionCount * 14)));
-        $dayColWidth = ($sessionCount > 0)
-            ? max(11, floor(($usable - $fixedWidth - $nameWidth) / $sessionCount))
-            : 14;
     @endphp
 
     @if ($students->isEmpty())
@@ -540,22 +538,13 @@
                 {{-- ── TABLA DEL CHUNK ── --}}
                 <div class="table-section">
                     <table>
-                        <colgroup>
-                            <col style="width:14px;">
-                            <col style="width:52px;">
-                            <col style="width:{{ $nameWidth }}px;">
-                            @foreach ($sessions as $session)
-                                <col style="width:{{ $dayColWidth }}px;">
-                            @endforeach
-                            <col style="width:30px;">
-                        </colgroup>
                         <thead>
                             <tr>
                                 <th class="col-num center" style="width:14px;">#</th>
                                 <th class="col-dni" style="width:52px;">DNI</th>
                                 <th class="col-name">Apellidos y Nombres</th>
                                 @foreach ($sessions as $session)
-                                    <th class="day-head center">
+                                    <th class="day-head center" style="width:14px;">
                                         {{ \Carbon\Carbon::parse($session->date)->format('d') }}<br>
                                         <span style="font-family:'MonaSans',sans-serif;font-weight:400;font-size:5.5px;opacity:0.85;text-transform:none;letter-spacing:0;">
                                             {{ \Carbon\Carbon::parse($session->date)->isoFormat('ddd') }}
